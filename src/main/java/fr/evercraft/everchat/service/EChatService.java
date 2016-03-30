@@ -56,7 +56,7 @@ public class EChatService implements ChatService {
 		reload();
 	}
 	
-	private void reload() {
+	public void reload() {
 		this.character.putAll(this.plugin.getConfigs().getReplaces());
 		this.icons.putAll(this.plugin.getConfigsIcons().getAllIcons());
 		
@@ -91,7 +91,7 @@ public class EChatService implements ChatService {
 		Preconditions.checkNotNull(message, "message");
 		
 		if(this.plugin.getConfigs().getIcons()) {
-			for(Entry<String, String> replace : this.character.entrySet()) {
+			for(Entry<String, String> replace : this.icons.entrySet()) {
 				message = message.replace(replace.getKey(), replace.getValue());
 			}
 		}

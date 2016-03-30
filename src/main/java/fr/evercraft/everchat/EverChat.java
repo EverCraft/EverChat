@@ -65,6 +65,7 @@ public class EverChat extends EPlugin {
 
 	protected void onReload(){
 		this.reloadConfigurations();
+		this.service.reload();
 	}
 	
 	protected void onDisable() {

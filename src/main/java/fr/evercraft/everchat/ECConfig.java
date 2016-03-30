@@ -31,9 +31,14 @@ public class ECConfig extends EConfig {
 		super(plugin);
 	}
 	
+	public void reload() {
+		super.reload();
+		this.plugin.getLogger().setDebug(this.isDebug());
+	}
+	
 	@Override
 	public void loadDefault() {
-		addDefault("debug", false);
+		addDefault("debug", false, "Displays plugin performance in the logs");
 		addDefault("language", EMessage.ENGLISH, "Select language messages", "Examples : ", "  French : FR_fr", "  English : EN_en");
 		
 		ConfigurationNode replaces = this.get("replaces");

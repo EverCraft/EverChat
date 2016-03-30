@@ -25,6 +25,8 @@ import fr.evercraft.everapi.plugin.file.EConfig;
 import fr.evercraft.everchat.EverChat;
 
 public class ECConfigIcons extends EConfig {
+	
+	private static final int CHARACTER = 36864;
 
 	public ECConfigIcons(final EverChat plugin) {
 		super(plugin);
@@ -239,8 +241,8 @@ public class ECConfigIcons extends EConfig {
 	public Map<String, String> getAllIcons() {
 		Map<String, String> replaces = new HashMap<String, String>();
 		for(Entry<Object, ? extends ConfigurationNode> node : this.getNode().getChildrenMap().entrySet()) {
-			if(node.getKey() instanceof String) {
-				replaces.put((String) node.getValue().getString(""), (String) node.getKey());
+			if(node.getKey() instanceof Integer) {
+				replaces.put((String) node.getValue().getString(""), String.valueOf((char)(CHARACTER + (int)node.getKey())));
 			}
 		}
 		return replaces;
