@@ -151,8 +151,8 @@ public class EChatService implements ChatService {
 	
 	public Text sendMessage(EPlayer player, String original) {
 		String message = this.getFormat(player.getPlayer().get());
-		message = this.plugin.getChat().replaceVariable(message);
-		message = this.plugin.getChat().replaceVariable(player, message);
+		message = this.plugin.getChat().replaceGlobal(message);
+		message = this.plugin.getChat().replacePlayer(player, message);
 		
 		original = this.plugin.getChat().replace(original);
 		
