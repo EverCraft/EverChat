@@ -23,6 +23,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.spongepowered.api.service.context.Context;
 import org.spongepowered.api.service.permission.Subject;
@@ -38,6 +40,8 @@ import fr.evercraft.everapi.text.ETextBuilder;
 import fr.evercraft.everchat.EverChat;
 
 public class EChatService implements ChatService {
+	private static final int CHARACTER = 36864;
+	
 	private final EverChat plugin;
 	
 	private final ConcurrentMap<String, String> character;
@@ -90,11 +94,26 @@ public class EChatService implements ChatService {
 	public String replaceIcons(String message) {
 		Preconditions.checkNotNull(message, "message");
 		
-		if(this.plugin.getConfigs().getIcons()) {
-			for(Entry<String, String> replace : this.icons.entrySet()) {
-				message = message.replace(replace.getKey(), replace.getValue());
-			}
-		}
+		Pattern pattern = Pattern.compile("<(icon|Icon|ICON)=(.*?)>");
+		Matcher matcher = pattern.matcher(message);
+		while(matcher.find()) {
+			String name = matcher.group(2);
+			try { 
+		        String value = String.valueOf((char)(CHARACTER + Integer.parseInt(name)));
+		        if(this.icons.containsValue(value)) {
+					message = matcher.replaceFirst(value);
+				} else {
+					message = matcher.replaceFirst("???");
+				}
+		    } catch(NumberFormatException | NullPointerException e) { 
+		    	if(this.icons.containsKey(name)) {
+					message = matcher.replaceFirst(this.icons.get(name));
+				} else {
+					message = matcher.replaceFirst("???");
+				}
+		    }
+			matcher = pattern.matcher(message);
+        }
 		return message;
     }
 	
@@ -151,6 +170,7 @@ public class EChatService implements ChatService {
 	
 	public Text sendMessage(EPlayer player, String original) {
 		String message = this.getFormat(player.getPlayer().get());
+		message = this.plugin.getChat().replace(message);
 		message = this.plugin.getChat().replaceGlobal(message);
 		message = this.plugin.getChat().replacePlayer(player, message);
 		
@@ -163,9 +183,8 @@ public class EChatService implements ChatService {
 			original_text = Text.of(original);
 		}
 		
-		return this.plugin.getChat().replaceVariableText(player, 
+		return this.plugin.getChat().replaceFormat(player, 
 				ETextBuilder.toBuilder(message)
-					.replace("<MESSAGE>", original_text)
-					.replace("<DISPLAYNAMEHOVER>", player.getDisplayNameHover()));
+					.replace("<MESSAGE>", original_text));
 	}
 }

@@ -56,9 +56,9 @@ public class ECConfig extends EConfig {
 		
 		ConfigurationNode formats = this.get("format-groups");
 		if(formats.getValue() == null) {
-			formats.getNode("Admin").setValue("&f[&4God&f] <DISPLAYNAMEHOVER>&7:&f <MESSAGE>");
-			formats.getNode("Moderator").setValue("&f[&5Mod&f] <DISPLAYNAMEHOVER>&7:&f <MESSAGE>");
-			formats.getNode("Default").setValue("<DISPLAYNAMEHOVER>&7:&f <MESSAGE>");
+			formats.getNode("Admin").setValue("&f[&4God&f] <DISPLAYNAME_FORMAT>&7:&f <MESSAGE>");
+			formats.getNode("Moderator").setValue("&f[&5Mod&f] <DISPLAYNAME_FORMAT>&7:&f <MESSAGE>");
+			formats.getNode("Default").setValue("<DISPLAYNAME_FORMAT>&7:&f <MESSAGE>");
 		}
 	}
 	
