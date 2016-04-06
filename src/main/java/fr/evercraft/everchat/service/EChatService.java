@@ -18,6 +18,7 @@ package fr.evercraft.everchat.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
@@ -40,7 +41,7 @@ import fr.evercraft.everapi.text.ETextBuilder;
 import fr.evercraft.everchat.EverChat;
 
 public class EChatService implements ChatService {
-	private static final int CHARACTER = 36864;
+	public static final int CHARACTER = 36864;
 	
 	private final EverChat plugin;
 	
@@ -186,5 +187,9 @@ public class EChatService implements ChatService {
 		return this.plugin.getChat().replaceFormat(player, 
 				ETextBuilder.toBuilder(message)
 					.replace("<MESSAGE>", original_text));
+	}
+
+	public Map<String, String> getIcons() {
+		return this.icons;
 	}
 }
