@@ -70,12 +70,64 @@ public class ECIcons extends ECommand<EverChat> {
 	
 	public boolean execute(final CommandSource source, final List<String> args) throws CommandException {
 		boolean resultat = false;
-		if(args.size() == 0) {
-			resultat = commandList(source);
-		} else if(args.size() >= 1) {
+		if(args.size() == 1) {
+			if(args.get(0).equalsIgnoreCase("list")) {
+				resultat = commandList(source);
+			} else if(args.get(0).equalsIgnoreCase("all")) {
+				resultat = commandAll(source);
+			} else {
+				source.sendMessage(help(source));
+			}
+		} else if(args.size() >= 2 && args.get(0).equalsIgnoreCase("search")) {
+			args.remove(0);
 			resultat = commandSearch(source, args);
+		} else {
+			source.sendMessage(help(source));
 		}
 		return resultat;
+	}
+
+	private boolean commandAll(CommandSource player) {
+		List<Text> lists = new ArrayList<Text>();
+		
+		Text line = Text.of();
+		int cpt = 0;
+
+		for(Entry<String, String> icon : (new TreeMap<String, String>(this.plugin.getService().getIcons())).entrySet()) {
+			if(cpt == 35) {
+				lists.add(line);
+				cpt = 0;
+				line = Text.of();
+			}
+			line = line.concat(getButtomAll(icon.getKey(), icon.getValue()));
+			cpt++;
+		}
+		
+		if(cpt != 0) {
+			lists.add(line);
+		}
+		
+		if(lists.isEmpty()) {
+			lists.add(this.plugin.getMessages().getText("ALL_EMPTY"));
+		}
+		
+		this.plugin.getEverAPI().getManagerService().getEPagination().sendTo(
+				this.plugin.getMessages().getText("ALL_TITLE").toBuilder()
+					.onClick(TextActions.runCommand("/icon all")).build(), 
+				lists, player);
+		return true;
+	}
+	
+	public Text getButtomAll(final String name, final String icon){
+		String id = getID(icon).toString();
+		return Text.builder(icon)
+					.onHover(TextActions.showText(EChat.of(this.plugin.getMessages().getMessage("LIST_HOVER")
+							.replaceAll("<id>", id)
+							.replaceAll("<icon>", icon)
+							.replaceAll("<name>", name))))
+					.onClick(TextActions.suggestCommand(icon))
+					.onShiftClick(TextActions.insertText(icon))
+					.build();
 	}
 
 	private boolean commandList(final CommandSource player) {
@@ -108,6 +160,7 @@ public class ECIcons extends ECommand<EverChat> {
 							.replaceAll("<icon>", icon)
 							.replaceAll("<name>", name))))
 					.onClick(TextActions.suggestCommand(icon))
+					.onShiftClick(TextActions.insertText(icon))
 					.build();
 	}
 	
@@ -159,6 +212,7 @@ public class ECIcons extends ECommand<EverChat> {
 							.replaceAll("<icon>", icon)
 							.replaceAll("<name>", name))))
 					.onClick(TextActions.suggestCommand(icon))
+					.onShiftClick(TextActions.insertText(icon))
 					.build();
 	}
 }
