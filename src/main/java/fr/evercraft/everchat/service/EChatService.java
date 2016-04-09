@@ -50,7 +50,7 @@ public class EChatService implements ChatService {
 	
 	private final ConcurrentMap<String, String> format;
 	
-	public EChatService(EverChat plugin) {
+	public EChatService(final EverChat plugin) {
 		this.plugin = plugin;
 		
 		this.character = new ConcurrentHashMap<String, String>();
@@ -70,18 +70,17 @@ public class EChatService implements ChatService {
 		this.plugin.getGame().getEventManager().post(new ChatSystemEvent(this.plugin, ChatSystemEvent.Action.RELOADED));
 	}
 	
+	/*
+	 * Un message
+	 */
+	
 	@Override
 	public String replace(String message) {
+		Preconditions.checkNotNull(message, "message");
+		
 		message = replaceCharacter(message);
 		message = replaceIcons(message);
 		return message;
-	}
-
-	@Override
-	public List<String> replace(List<String> messages) {
-		messages = replaceCharacter(messages);
-		messages = replaceIcons(messages);
-		return messages;
 	}
 	
 	public String replaceCharacter(String message) {
@@ -104,13 +103,13 @@ public class EChatService implements ChatService {
 		        if(this.icons.containsValue(value)) {
 					message = matcher.replaceFirst(value);
 				} else {
-					message = matcher.replaceFirst("???");
+					message = matcher.replaceFirst(this.plugin.getMessages().getMessage("ICON_UNKNOWN"));
 				}
 		    } catch(NumberFormatException | NullPointerException e) { 
 		    	if(this.icons.containsKey(name)) {
 					message = matcher.replaceFirst(this.icons.get(name));
 				} else {
-					message = matcher.replaceFirst("???");
+					message = matcher.replaceFirst(this.plugin.getMessages().getMessage("ICON_UNKNOWN"));
 				}
 		    }
 			matcher = pattern.matcher(message);
@@ -118,8 +117,22 @@ public class EChatService implements ChatService {
 		return message;
     }
 	
+	/*
+	 * Liste de message
+	 */
+	
+	@Override
+	public List<String> replace(List<String> messages) {
+		Preconditions.checkNotNull(messages, "messages");
+		
+		messages = replaceCharacter(messages);
+		messages = replaceIcons(messages);
+		return messages;
+	}
+	
 	public List<String> replaceCharacter(final List<String> messages) {
 		Preconditions.checkNotNull(messages, "messages");
+		
 		List<String> list = new ArrayList<String>();
         for(String message : messages){
         	list.add(this.replaceCharacter(message));
@@ -129,12 +142,17 @@ public class EChatService implements ChatService {
 	
 	public List<String> replaceIcons(final List<String> messages) {
 		Preconditions.checkNotNull(messages, "messages");
+		
 		List<String> list = new ArrayList<String>();
         for(String message : messages){
         	list.add(this.replaceIcons(message));
         }
         return list;
     }
+	
+	/*
+	 * Format
+	 */
 	
 	@Override
 	public String getFormat(final Subject subject) {
@@ -169,26 +187,27 @@ public class EChatService implements ChatService {
 		return Optional.empty();
     }
 	
-	public Text sendMessage(EPlayer player, String original) {
-		String message = this.getFormat(player.getPlayer().get());
-		message = this.plugin.getChat().replace(message);
-		message = this.plugin.getChat().replaceGlobal(message);
-		message = this.plugin.getChat().replacePlayer(player, message);
+	public Text sendMessage(final EPlayer player, String original) {
+		String format = this.getFormat(player.getPlayer().get());
+		format = this.plugin.getChat().replaceGlobal(format);
+		format = this.plugin.getChat().replacePlayer(player, format);
 		
 		original = this.plugin.getChat().replace(original);
 		
 		Text original_text;
-		if(player.hasPermission(this.plugin.getPermissions().get("COLOR"))) {
+		if(player.hasPermission(this.plugin.getPermissions().get("COLOR_CHAT"))) {
 			original_text = EChat.of(original);
 		} else {
 			original_text = Text.of(original);
 		}
 		
-		return this.plugin.getChat().replaceFormat(player, 
-				ETextBuilder.toBuilder(message)
-					.replace("<MESSAGE>", original_text));
+		return this.plugin.getChat().replaceFormat(player, ETextBuilder.toBuilder(format).replace("<MESSAGE>", original_text));
 	}
-
+	
+	/*
+	 * Accesseurs
+	 */
+	
 	public Map<String, String> getIcons() {
 		return this.icons;
 	}

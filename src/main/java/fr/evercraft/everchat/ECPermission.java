@@ -32,7 +32,9 @@ public class ECPermission extends EPermission {
 		add("HELP", "help");
 		add("RELOAD", "reload");
 		
-		add("COLOR", "color");
-		add("ICONS", "icons");
+		add("COLOR_CHAT", "color.chat");
+		add("COLOR_SIGN", "color.sign");
+		
+		add("ICON_COMMAND", "icon.command");
 	}
 }

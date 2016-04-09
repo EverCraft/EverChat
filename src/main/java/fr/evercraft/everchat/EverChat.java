@@ -21,9 +21,9 @@ import org.spongepowered.api.plugin.Plugin;
 
 import fr.evercraft.everapi.plugin.EPlugin;
 import fr.evercraft.everapi.services.chat.ChatService;
-import fr.evercraft.everchat.command.ECIcons;
+import fr.evercraft.everapi.services.chat.event.ChatSystemEvent;
+import fr.evercraft.everchat.icons.ECIconsConfig;
 import fr.evercraft.everchat.service.EChatService;
-import fr.evercraft.everchat.service.icon.ECConfigIcons;
 
 @Plugin(id = "fr.evercraft.everchat", 
 		name = "EverChat", 
@@ -36,7 +36,7 @@ import fr.evercraft.everchat.service.icon.ECConfigIcons;
 		})
 public class EverChat extends EPlugin {
 	private ECConfig configs;
-	private ECConfigIcons icons;
+	private ECIconsConfig icons;
 	
 	private ECMessage messages;
 	private ECPermission permissions;
@@ -48,7 +48,7 @@ public class EverChat extends EPlugin {
 		this.permissions = new ECPermission(this);
 		
 		this.configs = new ECConfig(this);
-		this.icons = new ECConfigIcons(this);
+		this.icons = new ECIconsConfig(this);
 		
 		this.messages = new ECMessage(this);
 		
@@ -58,19 +58,28 @@ public class EverChat extends EPlugin {
 		this.getGame().getServiceManager().setProvider(this, ChatService.class, this.service);
 	}
 
+	@Override
+	protected void onEnable() {
+		this.postEvent(ChatSystemEvent.Action.RELOADED);
+	}
 	
 	@Override
 	protected void onCompleteEnable() {
 		new ECCommand(this);
-		new ECIcons(this);
 	}
 
 	protected void onReload(){
 		this.reloadConfigurations();
 		this.service.reload();
+		this.postEvent(ChatSystemEvent.Action.RELOADED);
 	}
 	
 	protected void onDisable() {
+	}
+	
+	private void postEvent(ChatSystemEvent.Action action) {
+		this.getLogger().debug("Event ChatSystemEvent : (Action='" + action.name() +"')");
+		this.getGame().getEventManager().post(new ChatSystemEvent(this, action));
 	}
 
 	/*
@@ -88,7 +97,7 @@ public class EverChat extends EPlugin {
 		return this.configs;
 	}
 	
-	public ECConfigIcons getConfigsIcons() {
+	public ECIconsConfig getConfigsIcons() {
 		return this.icons;
 	}
 

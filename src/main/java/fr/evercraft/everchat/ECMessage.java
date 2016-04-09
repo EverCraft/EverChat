@@ -30,22 +30,12 @@ public class ECMessage extends EMessage {
 		addDefault("prefix", "[&4Ever&6&lIcons&f] ");
 		addDefault("description", "Gestion du tchat");
 		
-		addDefault("list.description", "Affiche la liste des icônes");
-		addDefault("list.title", "&aLa liste des icônes");
-		addDefault("list.line", "    <icon> &6: &7<name>");
-		addDefault("list.hover", "&7Numéro : <id>");
-		addDefault("list.empty", "&7Aucun icônes");
-		
-		addDefault("all.description", "Affiche tous les icônes");
-		addDefault("all.title", "&aTous les icônes");
-		addDefault("all.hover", "&7Numéro : <id>");
-		addDefault("all.empty", "&7Aucun icônes");
-		
-		addDefault("search.description", "&aRecherche des icônes");
-		addDefault("search.title", "&aRecherche d'icônes");
-		addDefault("search.line", "    <icon> &6: &7<name>");
-		addDefault("search.hover", "&7Numéro : <id>");
-		addDefault("search.empty", "&7Aucun icônes");
+		addDefault("icon.description", "Affiche la liste des icônes");
+		addDefault("icon.listTitle", "&aLa liste des icônes");
+		addDefault("icon.listEmtpy", "&7Aucun icône");
+		addDefault("icon.searchTitle", "&aRecherche d'icônes");
+		addDefault("icon.searchEmpty", "&aAucun icône ne correspond");
+		addDefault("icon.hover", "&7Numéro : &a<id>[RT]&7Nom : &a<name>");
 	}
 
 	@Override
@@ -54,21 +44,13 @@ public class ECMessage extends EMessage {
 		addMessage("PREFIX", "prefix");
 		addMessage("DESCRIPTION", "description");
 		
-		addMessage("LIST_DESCRIPTION", "list.description");
-		addMessage("LIST_TITLE", "list.title");
-		addMessage("LIST_LINE", "list.line");
-		addMessage("LIST_HOVER", "list.hover");
-		addMessage("LIST_EMPTY", "list.empty");
+		addMessage("ICON_DESCRIPTION", "icon.description");
+		addMessage("ICON_LIST_TITLE", "icon.listTitle");
+		addMessage("ICON_LIST_EMPTY", "icon.listEmtpy");
+		addMessage("ICON_SEARCH_TITLE", "icon.searchTitle");
+		addMessage("ICON_SEARCH_EMPTY", "icon.searchEmpty");
+		addMessage("ICON_HOVER", "icon.hover");
 		
-		addMessage("ALL_DESCRIPTION", "all.description");
-		addMessage("ALL_TITLE", "all.title");
-		addMessage("ALL_HOVER", "all.hover");
-		addMessage("ALL_EMPTY", "all.empty");
-		
-		addMessage("SEARCH_DESCRIPTION", "search.description");
-		addMessage("SEARCH_TITLE", "search.title");
-		addMessage("SEARCH_LINE", "search.line");
-		addMessage("SEARCH_HOVER", "search.hover");
-		addMessage("SEARCH_EMPTY", "search.empty");
+		addMessage("ICON_UNKNOWN", "icon.unknown");
 	}
 }
