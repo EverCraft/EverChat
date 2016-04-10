@@ -41,6 +41,9 @@ public class ECConfig extends EConfig {
 		addDefault("debug", false, "Displays plugin performance in the logs");
 		addDefault("language", EMessage.ENGLISH, "Select language messages", "Examples : ", "  French : FR_fr", "  English : EN_en");
 		
+		addDefault("enable-format", true);
+		addDefault("enable-icons", true);
+		
 		ConfigurationNode replaces = this.get("replaces");
 		if(replaces.getValue() == null) {
 			replaces.getNode("[<3]").setValue("\u2764");
@@ -51,14 +54,12 @@ public class ECConfig extends EConfig {
 			replaces.getNode("[RT]").setValue("\n");
 		}
 		
-		addDefault("icons", true);
-		addDefault("format-default", "<<NAME>> <MESSAGE>");
+		addDefault("format-default", "<DISPLAYNAME_FORMAT> &7:&f <MESSAGE>");
 		
 		ConfigurationNode formats = this.get("format-groups");
 		if(formats.getValue() == null) {
-			formats.getNode("Admin").setValue("&f[&4God&f] <DISPLAYNAME_FORMAT>&7:&f <MESSAGE>");
-			formats.getNode("Moderator").setValue("&f[&5Mod&f] <DISPLAYNAME_FORMAT>&7:&f <MESSAGE>");
-			formats.getNode("Default").setValue("<DISPLAYNAME_FORMAT>&7:&f <MESSAGE>");
+			formats.getNode("Admin").setValue("&f[&4Admin&f] <DISPLAYNAME_FORMAT> &7:&f <MESSAGE>");
+			formats.getNode("Moderator").setValue("&f[&5Moderator&f] <DISPLAYNAME_FORMAT> &7:&f <MESSAGE>");
 		}
 	}
 	
@@ -87,7 +88,11 @@ public class ECConfig extends EConfig {
 		return this.get("format-default").getString("<<NAME>> <MESSAGE>");
 	}
 	
-	public boolean getIcons() {
-		return this.get("icons").getBoolean(false);
+	public boolean enableFormat() {
+		return this.get("enable-format").getBoolean(true);
+	}
+	
+	public boolean enableIcons() {
+		return this.get("enable-icons").getBoolean(true);
 	}
 }

@@ -194,14 +194,16 @@ public class EChatService implements ChatService {
 		
 		original = this.plugin.getChat().replace(original);
 		
-		Text original_text;
-		if(player.hasPermission(this.plugin.getPermissions().get("COLOR_CHAT"))) {
-			original_text = EChat.of(original);
-		} else {
-			original_text = Text.of(original);
+		if(!player.hasPermission(this.plugin.getPermissions().get("COLOR"))) {
+			original = original.replaceAll(EChat.REGEX_COLOR, "");
 		}
-		
-		return this.plugin.getChat().replaceFormat(player, ETextBuilder.toBuilder(format).replace("<MESSAGE>", original_text));
+		if(!player.hasPermission(this.plugin.getPermissions().get("FORMAT"))) {
+			original = original.replaceAll(EChat.REGEX_FORMAT, "");
+		}
+		if(!player.hasPermission(this.plugin.getPermissions().get("MAGIC"))) {
+			original = original.replaceAll(EChat.REGEX_MAGIC, "");
+		}
+		return this.plugin.getChat().replaceFormat(player, ETextBuilder.toBuilder(format).replace("<MESSAGE>", EChat.of(original)));
 	}
 	
 	/*

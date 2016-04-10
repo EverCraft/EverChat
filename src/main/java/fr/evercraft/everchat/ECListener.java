@@ -18,18 +18,12 @@ package fr.evercraft.everchat;
 
 import java.util.Optional;
 
-import org.spongepowered.api.data.key.Keys;
-import org.spongepowered.api.data.manipulator.mutable.tileentity.SignData;
-import org.spongepowered.api.data.value.mutable.ListValue;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.block.tileentity.ChangeSignEvent;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.event.message.MessageChannelEvent;
-import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
-import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.server.player.EPlayer;
 
 public class ECListener {
@@ -41,22 +35,11 @@ public class ECListener {
 	
     @Listener
     public void onPlayerWriteChat(MessageChannelEvent.Chat event, @First Player player) {
-		Optional<EPlayer> eplayer = this.plugin.getEServer().getEPlayer(player);
-		if(eplayer.isPresent()){
-			event.setMessage(this.plugin.getService().sendMessage(eplayer.get(), TextSerializers.formattingCode('&').serialize(event.getRawMessage())));
-		}
+    	if(this.plugin.getConfigs().enableFormat()) {
+			Optional<EPlayer> eplayer = this.plugin.getEServer().getEPlayer(player);
+			if(eplayer.isPresent()){
+				event.setMessage(this.plugin.getService().sendMessage(eplayer.get(), TextSerializers.formattingCode('&').serialize(event.getRawMessage())));
+			}
+    	}
     }
-    
-    @Listener
-	public void onSignChange(ChangeSignEvent event, @First Player player) {
-		SignData signData = event.getText();
-		Optional<ListValue<Text>> value = signData.getValue(Keys.SIGN_LINES);
-		if(player.hasPermission(this.plugin.getPermissions().get("COLOR_SIGN")) && value.isPresent()) {
-			signData = signData.set(value.get().set(0, EChat.of(this.plugin.getChat().replace(value.get().get(0).toPlain()))));
-			signData = signData.set(value.get().set(1, EChat.of(this.plugin.getChat().replace(value.get().get(1).toPlain()))));
-			signData = signData.set(value.get().set(2, EChat.of(this.plugin.getChat().replace(value.get().get(2).toPlain()))));
-			signData = signData.set(value.get().set(3, EChat.of(this.plugin.getChat().replace(value.get().get(3).toPlain()))));
-		}
-	}
-
 }

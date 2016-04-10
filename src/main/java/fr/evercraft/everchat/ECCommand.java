@@ -36,7 +36,7 @@ public class ECCommand extends ECommand<EverChat> {
 	private final ECIconsCommand icons;
 
 	public ECCommand(final EverChat plugin) {
-		super(plugin, "everchat");
+		super(plugin, "everchat", "chat");
 		
 		this.icons = new ECIconsCommand(this.plugin);
     }
