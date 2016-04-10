@@ -28,14 +28,14 @@ public class ECMessage extends EMessage {
 	public void loadDefault() {
 		// Prefix
 		addDefault("prefix", "[&4Ever&6&lIcons&f] ");
-		addDefault("description", "Gestion du tchat");
+		addDefault("description", "Gestion du tchat", "Management of the chat");
 		
-		addDefault("icon.description", "Affiche la liste des icônes");
-		addDefault("icon.listTitle", "&aLa liste des icônes");
-		addDefault("icon.listEmtpy", "&7Aucun icône");
-		addDefault("icon.searchTitle", "&aRecherche d'icônes");
-		addDefault("icon.searchEmpty", "&aAucun icône ne correspond");
-		addDefault("icon.hover", "&7Numéro : &a<id>[RT]&7Nom : &a<name>");
+		addDefault("icon.description", "Affiche la liste des icônes", "Displays the list of icons");
+		addDefault("icon.listTitle", "&aLa liste des icônes", "&aThe list of icons");
+		addDefault("icon.listEmtpy", "&7Aucune icône", "&7None icon");
+		addDefault("icon.searchTitle", "&aRecherche d'icônes", "&aSearch for icons");
+		addDefault("icon.searchEmpty", "&aAucune icône trouvée", "&aNo found icon");
+		addDefault("icon.hover", "&7Numéro : &a<id>[RT]&7Nom : &a<name>", "&7ID : &a<id>[RT]&7Name : &a<name>");
 	}
 
 	@Override
