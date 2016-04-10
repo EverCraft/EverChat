@@ -4,7 +4,7 @@ EverChat
 A minecraft plugin for Sponge platforms.
 
 ## Links ##
-* [Source](https://github.com/EverCraft/EverChat)
+* [Download](https://github.com/EverCraft/EverChat/releases)
 * [Wiki](http://wiki.evercraft.fr)
 * [Issues](https://github.com/EverCraft/EverChat/issues)
 * [Website](http://evercraft.fr)
