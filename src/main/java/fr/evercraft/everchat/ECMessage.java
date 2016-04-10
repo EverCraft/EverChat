@@ -36,6 +36,7 @@ public class ECMessage extends EMessage {
 		addDefault("icon.searchTitle", "&aRecherche d'icônes", "&aSearch for icons");
 		addDefault("icon.searchEmpty", "&aAucune icône trouvée", "&aNo found icon");
 		addDefault("icon.hover", "&7Numéro : &a<id>[RT]&7Nom : &a<name>", "&7ID : &a<id>[RT]&7Name : &a<name>");
+		addDefault("icon.unknown", "<icon=UNKNOWN>");
 	}
 
 	@Override
