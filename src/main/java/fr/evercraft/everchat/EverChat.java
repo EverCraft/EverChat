@@ -27,12 +27,12 @@ import fr.evercraft.everchat.service.EChatService;
 
 @Plugin(id = "fr.evercraft.everchat", 
 		name = "EverChat", 
-		version = "1.0", 
+		version = "1.1", 
 		description = "Manage chat",
 		url = "http://evercraft.fr/",
 		authors = {"rexbut"},
 		dependencies = {
-		    @Dependency(id = "fr.evercraft.everapi", version = "1.0")
+		    @Dependency(id = "fr.evercraft.everapi", version = "1.1")
 		})
 public class EverChat extends EPlugin {
 	private ECConfig configs;
