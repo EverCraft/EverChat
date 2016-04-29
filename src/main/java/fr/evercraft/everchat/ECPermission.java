@@ -32,6 +32,9 @@ public class ECPermission extends EPermission {
 		add("HELP", "help");
 		add("RELOAD", "reload");
 		
+		add("CLEAR", "clear.command");
+		add("CLEAR_OTHERS", "clear.others");
+		
 		add("COLOR", "color");
 		add("FORMAT", "format");
 		add("MAGIC", "magic");

@@ -29,6 +29,7 @@ import org.spongepowered.api.text.format.TextColors;
 
 import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.ECommand;
+import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everapi.services.pagination.ESubCommand;
 import fr.evercraft.everchat.icons.ECIconsCommand;
 
@@ -108,6 +109,18 @@ public class ECCommand extends ECommand<EverChat> {
 				} else {
 					source.sendMessage(this.plugin.getPermissions().noPermission());
 				}
+			} else if(args.get(0).equalsIgnoreCase("clear")) {
+				if(source.hasPermission(this.plugin.getPermissions().get("CLEAR"))) {
+					// Si la source est bien un joueur
+					if(source instanceof EPlayer) {
+						resultat = commandClear((EPlayer) source);
+					// Si la source est une console ou un commande block
+					} else {
+						source.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("COMMAND_ERROR_FOR_PLAYER")));
+					}
+				} else {
+					source.sendMessage(this.plugin.getPermissions().noPermission());
+				}
 			} else {
 				source.sendMessage(help(source));
 			}
@@ -117,6 +130,13 @@ public class ECCommand extends ECommand<EverChat> {
 		return resultat;
 	}
 	
+	private boolean commandClear(EPlayer source) {
+		for(int cpt=0; cpt < 50; cpt++) {
+			source.sendMessage(Text.of(""));
+		}
+		return true;
+	}
+
 	private boolean commandHelp(final CommandSource source) {
 		LinkedHashMap<String, ESubCommand> commands = new LinkedHashMap<String, ESubCommand>();
 		if(source.hasPermission(this.plugin.getPermissions().get("RELOAD"))) {
