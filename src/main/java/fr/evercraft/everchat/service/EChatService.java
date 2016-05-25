@@ -38,6 +38,7 @@ import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everapi.services.chat.ChatService;
 import fr.evercraft.everapi.services.chat.event.ChatSystemEvent;
 import fr.evercraft.everapi.text.ETextBuilder;
+import fr.evercraft.everchat.ECMessage.ECMessages;
 import fr.evercraft.everchat.EverChat;
 
 public class EChatService implements ChatService {
@@ -103,13 +104,13 @@ public class EChatService implements ChatService {
 		        if(this.icons.containsValue(value)) {
 					message = matcher.replaceFirst(value);
 				} else {
-					message = matcher.replaceFirst(this.plugin.getMessages().getMessage("ICON_UNKNOWN"));
+					message = matcher.replaceFirst(ECMessages.ICON_UNKNOWN.get());
 				}
 		    } catch(NumberFormatException | NullPointerException e) { 
 		    	if(this.icons.containsKey(name)) {
 					message = matcher.replaceFirst(this.icons.get(name));
 				} else {
-					message = matcher.replaceFirst(this.plugin.getMessages().getMessage("ICON_UNKNOWN"));
+					message = matcher.replaceFirst(ECMessages.ICON_UNKNOWN.get());
 				}
 		    }
 			matcher = pattern.matcher(message);

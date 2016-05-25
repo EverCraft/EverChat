@@ -16,42 +16,119 @@
  */
 package fr.evercraft.everchat;
 
+import java.util.Arrays;
+import java.util.List;
+
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.format.TextColor;
+
+import com.google.common.base.Preconditions;
+
+import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.file.EMessage;
+import fr.evercraft.everapi.plugin.file.EnumMessage;
 
 public class ECMessage extends EMessage {
 
 	public ECMessage(final EverChat plugin) {
-		super(plugin);
+		super(plugin, ECMessages.values());
 	}
+	
+	public enum ECMessages implements EnumMessage {
+		PREFIX("prefix",  							
+				"[&4Ever&6&lIcons&f] "),
+		DESCRIPTION("description", 
+				"Gestion du tchat", 
+				"Management of the chat"),
+		
+		ICON_DESCRIPTION("icon.description", 
+				"Affiche la liste des icônes", 
+				"Displays the list of icons"),
+		ICON_LIST_TITLE("icon.listTitle", 
+				"&aLa liste des icônes", 
+				"&aThe list of icons"),
+		ICON_LIST_EMPTY("icon.listEmtpy", 
+				"&7Aucune icône", 
+				"&7None icon"),
+		ICON_SEARCH_TITLE("icon.searchTitle", 
+				"&aRecherche d'icônes", 
+				"&aSearch for icons"),
+		ICON_SEARCH_EMPTY("icon.searchEmpty", 
+				"&aAucune icône trouvée", 
+				"&aNo found icon"),
+		ICON_HOVER("icon.hover", 
+				"&7Numéro : &a<id>[RT]&7Nom : &a<name>", 
+				"&7ID : &a<id>[RT]&7Name : &a<name>"),
+		
+		ICON_UNKNOWN("icon.unknown", "<icon=UNKNOWN>");
+		
+		private final String path;
+	    private final Object french;
+	    private final Object english;
+	    private Object message;
+	    
+	    private ECMessages(final String path, final Object french) {   	
+	    	this(path, french, french);
+	    }
+	    
+	    private ECMessages(final String path, final Object french, final Object english) {
+	    	Preconditions.checkNotNull(french, "Le message '" + this.name() + "' n'est pas définit");
+	    	
+	    	this.path = path;	    	
+	    	this.french = french;
+	    	this.english = english;
+	    	this.message = french;
+	    }
 
+	    public String getName() {
+			return this.name();
+		}
+	    
+		public String getPath() {
+			return this.path;
+		}
+
+		public Object getFrench() {
+			return this.french;
+		}
+
+		public Object getEnglish() {
+			return this.english;
+		}
+		
+		public String get() {
+			if(this.message instanceof String) {
+				return (String) this.message;
+			}
+			return this.message.toString();
+		}
+			
+		@SuppressWarnings("unchecked")
+		public List<String> getList() {
+			if(this.message instanceof List) {
+				return (List<String>) this.message;
+			}
+			return Arrays.asList(this.message.toString());
+		}
+		
+		public void set(Object message) {
+			this.message = message;
+		}
+
+		public Text getText() {
+			return EChat.of(this.get());
+		}
+		
+		public TextColor getColor() {
+			return EChat.getTextColor(this.get());
+		}
+	}
+	
 	@Override
 	public void loadDefault() {
-		// Prefix
-		addDefault("prefix", "[&4Ever&6&lIcons&f] ");
-		addDefault("description", "Gestion du tchat", "Management of the chat");
-		
-		addDefault("icon.description", "Affiche la liste des icônes", "Displays the list of icons");
-		addDefault("icon.listTitle", "&aLa liste des icônes", "&aThe list of icons");
-		addDefault("icon.listEmtpy", "&7Aucune icône", "&7None icon");
-		addDefault("icon.searchTitle", "&aRecherche d'icônes", "&aSearch for icons");
-		addDefault("icon.searchEmpty", "&aAucune icône trouvée", "&aNo found icon");
-		addDefault("icon.hover", "&7Numéro : &a<id>[RT]&7Nom : &a<name>", "&7ID : &a<id>[RT]&7Name : &a<name>");
-		addDefault("icon.unknown", "<icon=UNKNOWN>");
 	}
 
 	@Override
 	public void loadConfig() {
-		// Prefix
-		addMessage("PREFIX", "prefix");
-		addMessage("DESCRIPTION", "description");
-		
-		addMessage("ICON_DESCRIPTION", "icon.description");
-		addMessage("ICON_LIST_TITLE", "icon.listTitle");
-		addMessage("ICON_LIST_EMPTY", "icon.listEmtpy");
-		addMessage("ICON_SEARCH_TITLE", "icon.searchTitle");
-		addMessage("ICON_SEARCH_EMPTY", "icon.searchEmpty");
-		addMessage("ICON_HOVER", "icon.hover");
-		
-		addMessage("ICON_UNKNOWN", "icon.unknown");
 	}
 }

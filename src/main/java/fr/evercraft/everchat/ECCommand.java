@@ -27,10 +27,11 @@ import org.spongepowered.api.text.LiteralText.Builder;
 import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
-import fr.evercraft.everapi.plugin.EChat;
+import fr.evercraft.everapi.EAMessage.EAMessages;
 import fr.evercraft.everapi.plugin.ECommand;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everapi.services.pagination.ESubCommand;
+import fr.evercraft.everchat.ECMessage.ECMessages;
 import fr.evercraft.everchat.icons.ECIconsCommand;
 
 public class ECCommand extends ECommand<EverChat> {
@@ -49,7 +50,7 @@ public class ECCommand extends ECommand<EverChat> {
 	
 	@Override
 	public Text description(final CommandSource source) {
-		return this.plugin.getMessages().getText("DESCRIPTION");
+		return ECMessages.DESCRIPTION.getText();
 	}
 
 	@Override
@@ -116,7 +117,7 @@ public class ECCommand extends ECommand<EverChat> {
 						resultat = commandClear((EPlayer) source);
 					// Si la source est une console ou un commande block
 					} else {
-						source.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("COMMAND_ERROR_FOR_PLAYER")));
+						source.sendMessage(ECMessages.PREFIX.getText().concat(EAMessages.COMMAND_ERROR_FOR_PLAYER.getText()));
 					}
 				} else {
 					source.sendMessage(this.plugin.getPermissions().noPermission());
@@ -140,7 +141,7 @@ public class ECCommand extends ECommand<EverChat> {
 	private boolean commandHelp(final CommandSource source) {
 		LinkedHashMap<String, ESubCommand> commands = new LinkedHashMap<String, ESubCommand>();
 		if(source.hasPermission(this.plugin.getPermissions().get("RELOAD"))) {
-			commands.put(this.getName() + " reload", new ESubCommand(this.helpReload(source), this.plugin.getEverAPI().getMessages().getText("RELOAD_DESCRIPTION")));
+			commands.put(this.getName() + " reload", new ESubCommand(this.helpReload(source), EAMessages.RELOAD_DESCRIPTION.getText()));
 		}
 		if(source.hasPermission(this.plugin.getPermissions().get("ICON_COMMAND"))) {
 			commands.put(this.icons.getName(), new ESubCommand(this.icons.help(source), this.icons.description(source)));
@@ -151,7 +152,7 @@ public class ECCommand extends ECommand<EverChat> {
 
 	private boolean commandReload(CommandSource player) {
 		this.plugin.reload();
-		player.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("RELOAD_COMMAND")));
+		player.sendMessage(ECMessages.PREFIX.getText().concat(EAMessages.RELOAD_COMMAND.getText()));
 		return true;
 	}
 }

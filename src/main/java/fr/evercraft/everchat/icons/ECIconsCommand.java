@@ -30,6 +30,7 @@ import org.spongepowered.api.text.format.TextColors;
 import fr.evercraft.everapi.java.UtilsList;
 import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.ECommand;
+import fr.evercraft.everchat.ECMessage.ECMessages;
 import fr.evercraft.everchat.EverChat;
 import fr.evercraft.everchat.service.EChatService;
 
@@ -48,7 +49,7 @@ public class ECIconsCommand extends ECommand<EverChat> {
 	
 	@Override
 	public Text description(final CommandSource source) {
-		return this.plugin.getMessages().getText("ICON_DESCRIPTION");
+		return ECMessages.ICON_DESCRIPTION.getText();
 	}
 
 	@Override
@@ -104,11 +105,11 @@ public class ECIconsCommand extends ECommand<EverChat> {
 		
 		// Il n'y a aucune ligne
 		if(lists.isEmpty()) {
-			lists.add(this.plugin.getMessages().getText("ICON_LIST_EMPTY"));
+			lists.add(ECMessages.ICON_LIST_EMPTY.getText());
 		}
 		
 		this.plugin.getEverAPI().getManagerService().getEPagination().sendTo(
-				this.plugin.getMessages().getText("ICON_LIST_TITLE").toBuilder()
+				ECMessages.ICON_LIST_TITLE.getText().toBuilder()
 					.onClick(TextActions.runCommand("/icon"))
 					.build(), 
 				lists, player);
@@ -149,11 +150,11 @@ public class ECIconsCommand extends ECommand<EverChat> {
 				
 		// Il n'y a aucune ligne
 		if(lists.isEmpty()) {
-			lists.add(this.plugin.getMessages().getText("ICON_SEARCH_EMPTY"));
+			lists.add(ECMessages.ICON_SEARCH_EMPTY.getText());
 		}
 		
 		this.plugin.getEverAPI().getManagerService().getEPagination().sendTo(
-				this.plugin.getMessages().getText("ICON_SEARCH_TITLE").toBuilder()
+				ECMessages.ICON_SEARCH_TITLE.getText().toBuilder()
 					.onClick(TextActions.runCommand("/icon " + String.join(" ", args)))
 					.build(), 
 				lists, player);
@@ -180,7 +181,7 @@ public class ECIconsCommand extends ECommand<EverChat> {
 	public Text getButtom(final String name, final String icon){
 		String id = getID(icon).toString();
 		return Text.builder(icon)
-					.onHover(TextActions.showText(EChat.of(this.plugin.getMessages().getMessage("ICON_HOVER")
+					.onHover(TextActions.showText(EChat.of(ECMessages.ICON_HOVER.get()
 							.replaceAll("<id>", id)
 							.replaceAll("<icon>", icon)
 							.replaceAll("<name>", name))))
