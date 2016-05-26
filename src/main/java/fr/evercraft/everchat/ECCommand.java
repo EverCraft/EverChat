@@ -101,14 +101,14 @@ public class ECCommand extends ECommand<EverChat> {
 			if(source.hasPermission(this.plugin.getPermissions().get("HELP"))) {
 				resultat = commandHelp(source);
 			} else {
-				source.sendMessage(this.plugin.getPermissions().noPermission());
+				source.sendMessage(EAMessages.NO_PERMISSION.getText());
 			}
 		} else if(args.size() == 1) {
 			if(args.get(0).equalsIgnoreCase("reload")) {
 				if(source.hasPermission(this.plugin.getPermissions().get("RELOAD"))) {
 					resultat = commandReload(source);
 				} else {
-					source.sendMessage(this.plugin.getPermissions().noPermission());
+					source.sendMessage(EAMessages.NO_PERMISSION.getText());
 				}
 			} else if(args.get(0).equalsIgnoreCase("clear")) {
 				if(source.hasPermission(this.plugin.getPermissions().get("CLEAR"))) {
@@ -120,7 +120,7 @@ public class ECCommand extends ECommand<EverChat> {
 						source.sendMessage(ECMessages.PREFIX.getText().concat(EAMessages.COMMAND_ERROR_FOR_PLAYER.getText()));
 					}
 				} else {
-					source.sendMessage(this.plugin.getPermissions().noPermission());
+					source.sendMessage(EAMessages.NO_PERMISSION.getText());
 				}
 			} else {
 				source.sendMessage(help(source));
