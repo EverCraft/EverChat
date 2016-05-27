@@ -123,12 +123,4 @@ public class ECMessage extends EMessage {
 			return EChat.getTextColor(this.get());
 		}
 	}
-	
-	@Override
-	public void loadDefault() {
-	}
-
-	@Override
-	public void loadConfig() {
-	}
 }
