@@ -27,6 +27,7 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
+import fr.evercraft.everapi.EAMessage.EAMessages;
 import fr.evercraft.everapi.java.UtilsList;
 import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.ECommand;
@@ -54,7 +55,7 @@ public class ECIconsCommand extends ECommand<EverChat> {
 
 	@Override
 	public Text help(final CommandSource source) {
-		return Text.builder("/icon [" + this.plugin.getEverAPI().getMessages().getArg("arguments") + "]")
+		return Text.builder("/icon [" + EAMessages.ARGS_ARGUMENTS.get() + "]")
 				.onClick(TextActions.suggestCommand("/icon "))
 				.color(TextColors.RED)
 				.build();
