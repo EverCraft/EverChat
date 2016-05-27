@@ -45,7 +45,7 @@ public class ECCommand extends ECommand<EverChat> {
 	
 	@Override
 	public boolean testPermission(final CommandSource source) {
-		return source.hasPermission(this.plugin.getPermissions().get("EVERCHAT"));
+		return source.hasPermission(ECPermissions.EVERCHAT.get());
 	}
 	
 	@Override
@@ -55,8 +55,8 @@ public class ECCommand extends ECommand<EverChat> {
 
 	@Override
 	public Text help(final CommandSource source) {
-		boolean help = source.hasPermission(this.plugin.getPermissions().get("HELP"));
-		boolean reload = source.hasPermission(this.plugin.getPermissions().get("RELOAD"));
+		boolean help = source.hasPermission(ECPermissions.HELP.get());
+		boolean reload = source.hasPermission(ECPermissions.RELOAD.get());
 
 		Builder build;
 		if(help || reload){
@@ -88,7 +88,7 @@ public class ECCommand extends ECommand<EverChat> {
 	public List<String> tabCompleter(final CommandSource source, final List<String> args) throws CommandException {
 		List<String> suggests = new ArrayList<String>();
 		if(args.size() == 1) {
-			if(source.hasPermission(this.plugin.getPermissions().get("RELOAD"))) {
+			if(source.hasPermission(ECPermissions.RELOAD.get())) {
 				suggests.add("reload");
 			}
 		}
@@ -98,20 +98,20 @@ public class ECCommand extends ECommand<EverChat> {
 	public boolean execute(final CommandSource source, final List<String> args) throws CommandException {
 		boolean resultat = false;
 		if(args.size() == 0 || args.get(0).equalsIgnoreCase("help")) {
-			if(source.hasPermission(this.plugin.getPermissions().get("HELP"))) {
+			if(source.hasPermission(ECPermissions.HELP.get())) {
 				resultat = commandHelp(source);
 			} else {
 				source.sendMessage(EAMessages.NO_PERMISSION.getText());
 			}
 		} else if(args.size() == 1) {
 			if(args.get(0).equalsIgnoreCase("reload")) {
-				if(source.hasPermission(this.plugin.getPermissions().get("RELOAD"))) {
+				if(source.hasPermission(ECPermissions.RELOAD.get())) {
 					resultat = commandReload(source);
 				} else {
 					source.sendMessage(EAMessages.NO_PERMISSION.getText());
 				}
 			} else if(args.get(0).equalsIgnoreCase("clear")) {
-				if(source.hasPermission(this.plugin.getPermissions().get("CLEAR"))) {
+				if(source.hasPermission(ECPermissions.CLEAR.get())) {
 					// Si la source est bien un joueur
 					if(source instanceof EPlayer) {
 						resultat = commandClear((EPlayer) source);
@@ -140,10 +140,10 @@ public class ECCommand extends ECommand<EverChat> {
 
 	private boolean commandHelp(final CommandSource source) {
 		LinkedHashMap<String, ESubCommand> commands = new LinkedHashMap<String, ESubCommand>();
-		if(source.hasPermission(this.plugin.getPermissions().get("RELOAD"))) {
+		if(source.hasPermission(ECPermissions.RELOAD.get())) {
 			commands.put(this.getName() + " reload", new ESubCommand(this.helpReload(source), EAMessages.RELOAD_DESCRIPTION.getText()));
 		}
-		if(source.hasPermission(this.plugin.getPermissions().get("ICON_COMMAND"))) {
+		if(source.hasPermission(ECPermissions.ICON_COMMAND.get())) {
 			commands.put(this.icons.getName(), new ESubCommand(this.icons.help(source), this.icons.description(source)));
 		}
 		this.plugin.getEverAPI().getManagerService().getEPagination().helpSubCommand(commands, source, this.plugin);

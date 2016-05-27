@@ -19,6 +19,7 @@ package fr.evercraft.everchat;
 import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
 
+import fr.evercraft.everapi.plugin.EPermission;
 import fr.evercraft.everapi.plugin.EPlugin;
 import fr.evercraft.everapi.services.chat.ChatService;
 import fr.evercraft.everapi.services.chat.event.ChatSystemEvent;
@@ -39,14 +40,11 @@ public class EverChat extends EPlugin {
 	private ECIconsConfig icons;
 	
 	private ECMessage messages;
-	private ECPermission permissions;
 	
 	private EChatService service;
 	
 	@Override
-	protected void onPreEnable() {
-		this.permissions = new ECPermission(this);
-		
+	protected void onPreEnable() {		
 		this.configs = new ECConfig(this);
 		this.icons = new ECIconsConfig(this);
 		
@@ -85,8 +83,8 @@ public class EverChat extends EPlugin {
 	/*
 	 * Accesseurs
 	 */
-	public ECPermission getPermissions() {
-		return this.permissions;
+	public EPermission getPermissions() {
+		return null;
 	}
 	
 	public ECMessage getMessages(){
