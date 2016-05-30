@@ -39,6 +39,7 @@ import fr.evercraft.everapi.services.chat.ChatService;
 import fr.evercraft.everapi.services.chat.event.ChatSystemEvent;
 import fr.evercraft.everapi.text.ETextBuilder;
 import fr.evercraft.everchat.ECMessage.ECMessages;
+import fr.evercraft.everchat.ECPermissions;
 import fr.evercraft.everchat.EverChat;
 
 public class EChatService implements ChatService {
@@ -195,13 +196,13 @@ public class EChatService implements ChatService {
 		
 		original = this.plugin.getChat().replace(original);
 		
-		if(!player.hasPermission(this.plugin.getPermissions().get("COLOR"))) {
+		if(!player.hasPermission(ECPermissions.COLOR.get())) {
 			original = original.replaceAll(EChat.REGEX_COLOR, "");
 		}
-		if(!player.hasPermission(this.plugin.getPermissions().get("FORMAT"))) {
+		if(!player.hasPermission(ECPermissions.FORMAT.get())) {
 			original = original.replaceAll(EChat.REGEX_FORMAT, "");
 		}
-		if(!player.hasPermission(this.plugin.getPermissions().get("MAGIC"))) {
+		if(!player.hasPermission(ECPermissions.MAGIC.get())) {
 			original = original.replaceAll(EChat.REGEX_MAGIC, "");
 		}
 		return this.plugin.getChat().replaceFormat(player, ETextBuilder.toBuilder(format).replace("<MESSAGE>", EChat.of(original)));

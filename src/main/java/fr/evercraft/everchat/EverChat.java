@@ -19,7 +19,6 @@ package fr.evercraft.everchat;
 import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
 
-import fr.evercraft.everapi.plugin.EPermission;
 import fr.evercraft.everapi.plugin.EPlugin;
 import fr.evercraft.everapi.services.chat.ChatService;
 import fr.evercraft.everapi.services.chat.event.ChatSystemEvent;
@@ -83,9 +82,6 @@ public class EverChat extends EPlugin {
 	/*
 	 * Accesseurs
 	 */
-	public EPermission getPermissions() {
-		return null;
-	}
 	
 	public ECMessage getMessages(){
 		return this.messages;

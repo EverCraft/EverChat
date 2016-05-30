@@ -32,6 +32,7 @@ import fr.evercraft.everapi.java.UtilsList;
 import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.ECommand;
 import fr.evercraft.everchat.ECMessage.ECMessages;
+import fr.evercraft.everchat.ECPermissions;
 import fr.evercraft.everchat.EverChat;
 import fr.evercraft.everchat.service.EChatService;
 
@@ -45,7 +46,7 @@ public class ECIconsCommand extends ECommand<EverChat> {
 	
 	@Override
 	public boolean testPermission(final CommandSource source) {
-		return source.hasPermission(this.plugin.getPermissions().get("ICON_COMMAND"));
+		return source.hasPermission(ECPermissions.ICON_COMMAND.get());
 	}
 	
 	@Override
