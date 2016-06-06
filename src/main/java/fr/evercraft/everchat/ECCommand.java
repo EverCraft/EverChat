@@ -19,6 +19,7 @@ package fr.evercraft.everchat;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Optional;
 
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandSource;
@@ -28,6 +29,7 @@ import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
 import fr.evercraft.everapi.EAMessage.EAMessages;
+import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.ECommand;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everapi.services.pagination.ESubCommand;
@@ -57,9 +59,10 @@ public class ECCommand extends ECommand<EverChat> {
 	public Text help(final CommandSource source) {
 		boolean help = source.hasPermission(ECPermissions.HELP.get());
 		boolean reload = source.hasPermission(ECPermissions.RELOAD.get());
+		boolean clear = source.hasPermission(ECPermissions.CLEAR.get()) || source.hasPermission(ECPermissions.CLEAR_OTHERS.get());;
 
 		Builder build;
-		if(help || reload){
+		if(help || reload || clear){
 			build = Text.builder("/" + this.getName() + " <");
 			if(help){
 				build = build.append(Text.builder("help").onClick(TextActions.suggestCommand("/" + this.getName() + " help")).build());
@@ -69,6 +72,12 @@ public class ECCommand extends ECommand<EverChat> {
 			}
 			if(reload){
 				build = build.append(Text.builder("reload").onClick(TextActions.suggestCommand("/" + this.getName() + " reload")).build());
+				if(clear){
+					build = build.append(Text.builder("|").build());
+				}
+			}
+			if(clear){
+				build = build.append(Text.builder("clear").onClick(TextActions.suggestCommand("/" + this.getName() + " clear")).build());
 			}
 			build = build.append(Text.builder(">").build());
 		} else {
@@ -83,6 +92,20 @@ public class ECCommand extends ECommand<EverChat> {
 					.color(TextColors.RED)
 					.build();
 	}
+	
+	public Text helpClear(final CommandSource source) {
+		if (source.hasPermission(ECPermissions.CLEAR_OTHERS.get())){
+			return Text.builder("/" + this.getName() + " clear [joueur|*]")
+						.onClick(TextActions.suggestCommand("/" + this.getName() + " clear"))
+						.color(TextColors.RED)
+						.build();
+		} else {
+			return Text.builder("/" + this.getName() + " clear")
+					.onClick(TextActions.suggestCommand("/" + this.getName() + " clear"))
+					.color(TextColors.RED)
+					.build();
+		}
+	}
 
 	@Override
 	public List<String> tabCompleter(final CommandSource source, final List<String> args) throws CommandException {
@@ -91,6 +114,11 @@ public class ECCommand extends ECommand<EverChat> {
 			if(source.hasPermission(ECPermissions.RELOAD.get())) {
 				suggests.add("reload");
 			}
+			if(source.hasPermission(ECPermissions.CLEAR.get()) || source.hasPermission(ECPermissions.CLEAR_OTHERS.get())) {
+				suggests.add("clear");
+			}
+		} else if(args.size() == 2 && source.hasPermission(ECPermissions.CLEAR_OTHERS.get())) {
+			suggests = null;
 		}
 		return suggests;
 	}
@@ -125,16 +153,73 @@ public class ECCommand extends ECommand<EverChat> {
 			} else {
 				source.sendMessage(help(source));
 			}
+		} else if(args.size() == 2){
+			this.plugin.getEServer().broadcast("test 1");
+			if(args.get(0).equalsIgnoreCase("clear")) {
+				if(source.hasPermission(ECPermissions.CLEAR_OTHERS.get())) {
+					// Si la source est bien un joueur
+					if(source instanceof EPlayer) {
+						if(args.get(1).equals("*")) {
+							resultat = commandClearAll(source);
+						} else {
+							Optional<EPlayer> optPlayer = this.plugin.getEServer().getEPlayer(args.get(1));
+							// Le joueur existe
+							if(optPlayer.isPresent()){
+								resultat = commandClearOthers(source, optPlayer.get());
+							// Le joueur est introuvable
+							} else {
+								source.sendMessage(ECMessages.PREFIX.getText().concat(EAMessages.PLAYER_NOT_FOUND.getText()));
+							}
+						}
+					// Si la source est une console ou un commande block
+					} else {
+						source.sendMessage(ECMessages.PREFIX.getText().concat(EAMessages.COMMAND_ERROR_FOR_PLAYER.getText()));
+					}
+				} else {
+					source.sendMessage(EAMessages.NO_PERMISSION.getText());
+				}
+			} else {
+				source.sendMessage(help(source));
+			}
 		} else {
 			source.sendMessage(help(source));
 		}
 		return resultat;
 	}
 	
-	private boolean commandClear(EPlayer source) {
-		for(int cpt=0; cpt < 50; cpt++) {
+	private boolean commandClear(CommandSource source) {
+		for(int cpt=0; cpt < 60; cpt++) {
 			source.sendMessage(Text.of(""));
 		}
+		return true;
+	}
+	
+	private boolean commandClearOthers(CommandSource source, EPlayer destination) throws CommandException{
+		if(!source.equals(destination)){
+			if(commandClear(destination)){
+				source.sendMessage(EChat.of(ECMessages.PREFIX.get() + ECMessages.CLEAR_OTHERS.get()
+						.replaceAll("<player>", destination.getDisplayName())));
+				destination.sendMessage(ECMessages.PREFIX.get() + ECMessages.CLEAR_PLAYER.get()
+						.replaceAll("<player>", source.getName()));
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return execute(source, new ArrayList<String>());
+		}
+	}
+	
+	private boolean commandClearAll(CommandSource source){
+		for(EPlayer destination : this.plugin.getEServer().getOnlineEPlayers()){
+			if(!source.equals(destination)){
+				if(commandClear(destination)){
+					destination.sendMessage(ECMessages.PREFIX.get() + ECMessages.CLEAR_PLAYER.get()
+							.replaceAll("<player>", source.getName()));
+				}
+			}
+		}
+		source.sendMessage(ECMessages.PREFIX.getText().concat(ECMessages.CLEAR_ALL.getText()));
 		return true;
 	}
 
@@ -145,6 +230,9 @@ public class ECCommand extends ECommand<EverChat> {
 		}
 		if(source.hasPermission(ECPermissions.ICON_COMMAND.get())) {
 			commands.put(this.icons.getName(), new ESubCommand(this.icons.help(source), this.icons.description(source)));
+		}
+		if(source.hasPermission(ECPermissions.CLEAR.get())) {
+			commands.put(this.getName() + " clear", new ESubCommand(this.helpClear(source), ECMessages.CLEAR_DESCRIPTION.getText()));
 		}
 		this.plugin.getEverAPI().getManagerService().getEPagination().helpSubCommand(commands, source, this.plugin);
 		return true;
