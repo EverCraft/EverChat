@@ -33,10 +33,10 @@ import org.spongepowered.api.text.Text;
 
 import com.google.common.base.Preconditions;
 
+import fr.evercraft.everapi.event.ChatSystemEvent;
 import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.server.player.EPlayer;
-import fr.evercraft.everapi.services.chat.ChatService;
-import fr.evercraft.everapi.services.chat.event.ChatSystemEvent;
+import fr.evercraft.everapi.services.ChatService;
 import fr.evercraft.everapi.text.ETextBuilder;
 import fr.evercraft.everchat.ECMessage.ECMessages;
 import fr.evercraft.everchat.ECPermissions;
@@ -69,7 +69,7 @@ public class EChatService implements ChatService {
 		
 		this.format.putAll(this.plugin.getConfigs().getFormatGroups());
 		
-		this.plugin.getGame().getEventManager().post(new ChatSystemEvent(this.plugin, ChatSystemEvent.Action.RELOADED));
+		this.plugin.postEvent(ChatSystemEvent.Action.RELOADED);
 	}
 	
 	/*

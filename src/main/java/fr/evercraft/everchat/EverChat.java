@@ -16,14 +16,16 @@
  */
 package fr.evercraft.everchat;
 
+import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
 
+import fr.evercraft.everapi.event.ChatSystemEvent;
 import fr.evercraft.everapi.plugin.EPlugin;
-import fr.evercraft.everapi.services.chat.ChatService;
-import fr.evercraft.everapi.services.chat.event.ChatSystemEvent;
+import fr.evercraft.everapi.services.ChatService;
 import fr.evercraft.everchat.icons.ECIconsConfig;
 import fr.evercraft.everchat.service.EChatService;
+import fr.evercraft.everchat.service.event.EReloadChatSystemEvent;
 
 @Plugin(id = "fr.evercraft.everchat", 
 		name = "EverChat", 
@@ -68,15 +70,16 @@ public class EverChat extends EPlugin {
 	protected void onReload(){
 		this.reloadConfigurations();
 		this.service.reload();
-		this.postEvent(ChatSystemEvent.Action.RELOADED);
 	}
 	
 	protected void onDisable() {
 	}
 	
-	private void postEvent(ChatSystemEvent.Action action) {
-		this.getLogger().debug("Event ChatSystemEvent : (Action='" + action.name() +"')");
-		this.getGame().getEventManager().post(new ChatSystemEvent(this, action));
+	public void postEvent(ChatSystemEvent.Action action) {
+		if(action.equals(ChatSystemEvent.Action.RELOADED)) {
+			this.getLogger().debug("Event ChatSystemEvent.Reload");
+			this.getGame().getEventManager().post(new EReloadChatSystemEvent(Cause.source(this).build()));
+		}
 	}
 
 	/*
