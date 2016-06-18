@@ -29,10 +29,10 @@ import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
 import fr.evercraft.everapi.EAMessage.EAMessages;
+import fr.evercraft.everapi.command.ECommand;
 import fr.evercraft.everapi.plugin.EChat;
-import fr.evercraft.everapi.plugin.ECommand;
 import fr.evercraft.everapi.server.player.EPlayer;
-import fr.evercraft.everapi.services.pagination.ESubCommand;
+import fr.evercraft.everapi.services.pagination.CommandPagination;
 import fr.evercraft.everchat.ECMessage.ECMessages;
 import fr.evercraft.everchat.icons.ECIconsCommand;
 
@@ -224,16 +224,16 @@ public class ECCommand extends ECommand<EverChat> {
 	}
 
 	private boolean commandHelp(final CommandSource source) {
-		LinkedHashMap<String, ESubCommand> commands = new LinkedHashMap<String, ESubCommand>();
-		if(source.hasPermission(ECPermissions.RELOAD.get())) {
-			commands.put(this.getName() + " reload", new ESubCommand(this.helpReload(source), EAMessages.RELOAD_DESCRIPTION.getText()));
+		LinkedHashMap<String, CommandPagination> commands = new LinkedHashMap<String, CommandPagination>();
+		/*if(source.hasPermission(ECPermissions.RELOAD.get())) {
+			commands.put(this.getName() + " reload", new CommandPagination(this.helpReload(source), EAMessages.RELOAD_DESCRIPTION.getText()));
 		}
 		if(source.hasPermission(ECPermissions.ICON_COMMAND.get())) {
-			commands.put(this.icons.getName(), new ESubCommand(this.icons.help(source), this.icons.description(source)));
+			commands.put(this.icons.getName(), new CommandPagination(this.icons.help(source), this.icons.description(source)));
 		}
 		if(source.hasPermission(ECPermissions.CLEAR.get())) {
-			commands.put(this.getName() + " clear", new ESubCommand(this.helpClear(source), ECMessages.CLEAR_DESCRIPTION.getText()));
-		}
+			commands.put(this.getName() + " clear", new CommandPagination(this.helpClear(source), ECMessages.CLEAR_DESCRIPTION.getText()));
+		}*/
 		this.plugin.getEverAPI().getManagerService().getEPagination().helpSubCommand(commands, source, this.plugin);
 		return true;
 	}
