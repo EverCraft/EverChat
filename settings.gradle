@@ -1,4 +1,0 @@
-rootProject.name = "EverChat"
-include ':EverAPI'
-
-project(':EverAPI').projectDir = new File( '../EverAPI' )

@@ -23,6 +23,9 @@ import org.spongepowered.api.plugin.Plugin;
 import fr.evercraft.everapi.event.ChatSystemEvent;
 import fr.evercraft.everapi.plugin.EPlugin;
 import fr.evercraft.everapi.services.ChatService;
+import fr.evercraft.everchat.command.ECIcons;
+import fr.evercraft.everchat.command.sub.ECClear;
+import fr.evercraft.everchat.command.sub.ECReload;
 import fr.evercraft.everchat.icons.ECIconsConfig;
 import fr.evercraft.everchat.service.EChatService;
 import fr.evercraft.everchat.service.event.EReloadChatSystemEvent;
@@ -64,7 +67,12 @@ public class EverChat extends EPlugin {
 	
 	@Override
 	protected void onCompleteEnable() {
-		new ECCommand(this);
+		ECCommand command = new ECCommand(this);
+		
+		command.add(new ECIcons(this));
+		
+		command.add(new ECClear(this, command));
+		command.add(new ECReload(this, command));
 	}
 
 	protected void onReload(){

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with EverChat.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fr.evercraft.everchat.icons;
+package fr.evercraft.everchat.command;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,11 +36,11 @@ import fr.evercraft.everchat.ECPermissions;
 import fr.evercraft.everchat.EverChat;
 import fr.evercraft.everchat.service.EChatService;
 
-public class ECIconsCommand extends ECommand<EverChat> {
+public class ECIcons extends ECommand<EverChat> {
 	private final static int MAX_CARACTER = 35;
 	
 
-	public ECIconsCommand(final EverChat plugin) {
+	public ECIcons(final EverChat plugin) {
 		super(plugin, "icon", "icons");
     }
 	
