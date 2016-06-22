@@ -26,8 +26,8 @@ import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
 import fr.evercraft.everapi.EAMessage.EAMessages;
-import fr.evercraft.everapi.command.ESubCommand;
 import fr.evercraft.everapi.plugin.EChat;
+import fr.evercraft.everapi.plugin.command.ESubCommand;
 import fr.evercraft.everchat.ECMessage.ECMessages;
 import fr.evercraft.everchat.ECPermissions;
 import fr.evercraft.everchat.ECCommand;
