@@ -18,7 +18,9 @@ package fr.evercraft.everchat.service.event;
 
 import org.spongepowered.api.event.cause.Cause;
 
-public class EReloadChatSystemEvent extends EChatSystemEvent {
+import fr.evercraft.everapi.event.ChatSystemEvent;
+
+public class EReloadChatSystemEvent extends EChatSystemEvent implements ChatSystemEvent.Reload {
 	
     public EReloadChatSystemEvent(final Cause cause) {
     	super(cause, Action.RELOADED);
