@@ -85,6 +85,7 @@ public class EChatService implements ChatService {
 		return message;
 	}
 	
+	@Override
 	public String replaceCharacter(String message) {
 		Preconditions.checkNotNull(message, "message");
 		for(Entry<String, String> replace : this.character.entrySet()) {
@@ -93,6 +94,7 @@ public class EChatService implements ChatService {
 		return message;
     }
 	
+	@Override
 	public String replaceIcons(String message) {
 		Preconditions.checkNotNull(message, "message");
 		
@@ -194,8 +196,6 @@ public class EChatService implements ChatService {
 		format = this.plugin.getChat().replaceGlobal(format);
 		format = this.plugin.getChat().replacePlayer(player, format);
 		
-		original = this.plugin.getChat().replace(original);
-		
 		if(!player.hasPermission(ECPermissions.COLOR.get())) {
 			original = original.replaceAll(EChat.REGEX_COLOR, "");
 		}
@@ -204,6 +204,12 @@ public class EChatService implements ChatService {
 		}
 		if(!player.hasPermission(ECPermissions.MAGIC.get())) {
 			original = original.replaceAll(EChat.REGEX_MAGIC, "");
+		}
+		if(player.hasPermission(ECPermissions.CHARACTER.get())) {
+			original = this.plugin.getChat().replaceCharacter(original);
+		}
+		if(player.hasPermission(ECPermissions.ICONS.get())) {
+			original = this.plugin.getChat().replaceIcons(original);
 		}
 		return this.plugin.getChat().replaceFormat(player, ETextBuilder.toBuilder(format).replace("<MESSAGE>", EChat.of(original)));
 	}

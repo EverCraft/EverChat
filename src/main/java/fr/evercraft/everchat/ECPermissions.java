@@ -31,9 +31,11 @@ public enum ECPermissions implements EnumPermission {
 	CLEAR("clear.command"),
 	CLEAR_OTHERS("clear.others"),
 	
-	COLOR("color"),
-	FORMAT("format"),
-	MAGIC("magic"),
+	COLOR("replace.color"),
+	FORMAT("replace.format"),
+	MAGIC("replace.magic"),
+	CHARACTER("replace.character"),
+	ICONS("replace.icons"),
 	
 	ICON_COMMAND("icon");
 	
