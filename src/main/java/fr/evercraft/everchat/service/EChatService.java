@@ -88,7 +88,7 @@ public class EChatService implements ChatService {
 	@Override
 	public String replaceCharacter(String message) {
 		Preconditions.checkNotNull(message, "message");
-		for(Entry<String, String> replace : this.character.entrySet()) {
+		for (Entry<String, String> replace : this.character.entrySet()) {
 			message = message.replace(replace.getKey(), replace.getValue());
 		}
 		return message;
@@ -104,13 +104,13 @@ public class EChatService implements ChatService {
 			String name = matcher.group(2);
 			try { 
 		        String value = String.valueOf((char)(CHARACTER + Integer.parseInt(name)));
-		        if(this.icons.containsValue(value)) {
+		        if (this.icons.containsValue(value)) {
 					message = matcher.replaceFirst(value);
 				} else {
 					message = matcher.replaceFirst(ECMessages.ICON_UNKNOWN.get());
 				}
 		    } catch(NumberFormatException | NullPointerException e) { 
-		    	if(this.icons.containsKey(name)) {
+		    	if (this.icons.containsKey(name)) {
 					message = matcher.replaceFirst(this.icons.get(name));
 				} else {
 					message = matcher.replaceFirst(ECMessages.ICON_UNKNOWN.get());
@@ -138,7 +138,7 @@ public class EChatService implements ChatService {
 		Preconditions.checkNotNull(messages, "messages");
 		
 		List<String> list = new ArrayList<String>();
-        for(String message : messages){
+        for (String message : messages){
         	list.add(this.replaceCharacter(message));
         }
         return list;
@@ -148,7 +148,7 @@ public class EChatService implements ChatService {
 		Preconditions.checkNotNull(messages, "messages");
 		
 		List<String> list = new ArrayList<String>();
-        for(String message : messages){
+        for (String message : messages){
         	list.add(this.replaceIcons(message));
         }
         return list;
@@ -170,11 +170,11 @@ public class EChatService implements ChatService {
 		String format = null;
 		Optional<Subject> group = this.getGroup(subject, contexts);
 		
-		if(group.isPresent()) {
+		if (group.isPresent()) {
 			format = this.format.get(group.get().getIdentifier());
 		}
 		
-		if(format == null) {
+		if (format == null) {
 			format = this.plugin.getConfigs().getFormatDefault();
 		}
         return format;
@@ -185,7 +185,7 @@ public class EChatService implements ChatService {
 		Preconditions.checkNotNull(contexts, "contexts");
 		
 		List<Subject> groups = subject.getSubjectData().getParents(contexts);
-		if(!groups.isEmpty()) {
+		if (!groups.isEmpty()) {
 			return Optional.of(groups.get(0));
 		}
 		return Optional.empty();
@@ -196,19 +196,19 @@ public class EChatService implements ChatService {
 		format = this.plugin.getChat().replaceGlobal(format);
 		format = this.plugin.getChat().replacePlayer(player, format);
 		
-		if(!player.hasPermission(ECPermissions.COLOR.get())) {
+		if (!player.hasPermission(ECPermissions.COLOR.get())) {
 			original = original.replaceAll(EChat.REGEX_COLOR, "");
 		}
-		if(!player.hasPermission(ECPermissions.FORMAT.get())) {
+		if (!player.hasPermission(ECPermissions.FORMAT.get())) {
 			original = original.replaceAll(EChat.REGEX_FORMAT, "");
 		}
-		if(!player.hasPermission(ECPermissions.MAGIC.get())) {
+		if (!player.hasPermission(ECPermissions.MAGIC.get())) {
 			original = original.replaceAll(EChat.REGEX_MAGIC, "");
 		}
-		if(player.hasPermission(ECPermissions.CHARACTER.get())) {
+		if (player.hasPermission(ECPermissions.CHARACTER.get())) {
 			original = this.plugin.getChat().replaceCharacter(original);
 		}
-		if(player.hasPermission(ECPermissions.ICONS.get())) {
+		if (player.hasPermission(ECPermissions.ICONS.get())) {
 			original = this.plugin.getChat().replaceIcons(original);
 		}
 		return this.plugin.getChat().replaceFormat(player, ETextBuilder.toBuilder(format).replace("<MESSAGE>", EChat.of(original)));

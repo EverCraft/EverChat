@@ -33,7 +33,7 @@ public class ECIconsConfig extends EConfig {
 	
 	@Override
 	public void loadDefault() {		
-		if(this.getNode().getValue() == null) {
+		if (this.getNode().getValue() == null) {
 			/*
 			 * unicode_page_93
 			 */
@@ -2368,8 +2368,8 @@ public class ECIconsConfig extends EConfig {
 	
 	public Map<String, String> getAllIcons() {
 		Map<String, String> replaces = new HashMap<String, String>();
-		for(Entry<Object, ? extends ConfigurationNode> node : this.getNode().getChildrenMap().entrySet()) {
-			if(node.getKey() instanceof String) {
+		for (Entry<Object, ? extends ConfigurationNode> node : this.getNode().getChildrenMap().entrySet()) {
+			if (node.getKey() instanceof String) {
 				try {
 					replaces.put(((String) node.getKey()).toUpperCase(), String.valueOf((char)(EChatService.CHARACTER + node.getValue().getInt(0))));
 				} catch (NumberFormatException e) {}

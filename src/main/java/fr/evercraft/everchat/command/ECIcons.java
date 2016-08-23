@@ -70,7 +70,7 @@ public class ECIcons extends ECommand<EverChat> {
 	@Override
 	public boolean execute(final CommandSource source, final List<String> args) throws CommandException {
 		boolean resultat = false;
-		if(args.size() == 0) {
+		if (args.size() == 0) {
 			commandList(source);
 		} else {
 			resultat = commandSearch(source, args);
@@ -89,9 +89,9 @@ public class ECIcons extends ECommand<EverChat> {
 		int cpt = 0;
 
 		// Pour tous les icones
-		for(Entry<String, String> icon : (new TreeMap<String, String>(this.plugin.getService().getIcons())).entrySet()) {
+		for (Entry<String, String> icon : (new TreeMap<String, String>(this.plugin.getService().getIcons())).entrySet()) {
 			// La ligne est compléte
-			if(cpt == MAX_CARACTER) {
+			if (cpt == MAX_CARACTER) {
 				lists.add(line);
 				cpt = 0;
 				line = Text.of();
@@ -101,12 +101,12 @@ public class ECIcons extends ECommand<EverChat> {
 		}
 		
 		// Il y a des icones dans la ligne temporairé
-		if(cpt != 0) {
+		if (cpt != 0) {
 			lists.add(line);
 		}
 		
 		// Il n'y a aucune ligne
-		if(lists.isEmpty()) {
+		if (lists.isEmpty()) {
 			lists.add(ECMessages.ICON_LIST_EMPTY.getText());
 		}
 		
@@ -130,28 +130,28 @@ public class ECIcons extends ECommand<EverChat> {
 		int cpt = 0;
 
 		// Pour tous les icones
-		for(Entry<String, String> icon : (new TreeMap<String, String>(this.plugin.getService().getIcons())).entrySet()) {
+		for (Entry<String, String> icon : (new TreeMap<String, String>(this.plugin.getService().getIcons())).entrySet()) {
 			// La ligne est compléte
-			if(cpt == MAX_CARACTER) {
+			if (cpt == MAX_CARACTER) {
 				lists.add(line);
 				cpt = 0;
 				line = Text.of();
 			}
 			
 			// L'icone correspond à la recherche
-			if(this.contains(icon.getKey().toLowerCase(), args)) {
+			if (this.contains(icon.getKey().toLowerCase(), args)) {
 				line = line.concat(getButtom(icon.getKey(), icon.getValue()));
 				cpt++;
 			}
 		}
 		
 		// Il y a des icones dans la ligne temporairé
-		if(cpt != 0) {
+		if (cpt != 0) {
 			lists.add(line);
 		}
 				
 		// Il n'y a aucune ligne
-		if(lists.isEmpty()) {
+		if (lists.isEmpty()) {
 			lists.add(ECMessages.ICON_SEARCH_EMPTY.getText());
 		}
 		
@@ -164,7 +164,7 @@ public class ECIcons extends ECommand<EverChat> {
 	}
 	
 	public boolean contains(final String message, final List<String> args) {
-		if(!args.isEmpty()) {
+		if (!args.isEmpty()) {
 			boolean contains = message.contains(args.get(0));
 			int cpt = 1;
 			while(contains && cpt < args.size()) {
@@ -194,7 +194,7 @@ public class ECIcons extends ECommand<EverChat> {
 	
 	public Integer getID(final String icon){
 		char[] caractere = icon.toCharArray();
-		if(caractere.length >= 1) {
+		if (caractere.length >= 1) {
 			return ((int) caractere[0]) - EChatService.CHARACTER;
 		}
 		return -1;

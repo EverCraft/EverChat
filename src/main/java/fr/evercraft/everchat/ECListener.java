@@ -35,9 +35,9 @@ public class ECListener {
 	
     @Listener
     public void onPlayerWriteChat(MessageChannelEvent.Chat event, @First Player player) {
-    	if(this.plugin.getConfigs().enableFormat()) {
+    	if (this.plugin.getConfigs().enableFormat()) {
 			Optional<EPlayer> eplayer = this.plugin.getEServer().getEPlayer(player);
-			if(eplayer.isPresent()){
+			if (eplayer.isPresent()){
 				event.setMessage(this.plugin.getService().sendMessage(eplayer.get(), TextSerializers.formattingCode('&').serialize(event.getRawMessage())));
 			}
     	}

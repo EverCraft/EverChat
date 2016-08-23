@@ -54,7 +54,7 @@ public class ECClear extends ESubCommand<EverChat> {
 	}
 	
 	public List<String> subTabCompleter(final CommandSource source, final List<String> args) throws CommandException {
-		if(args.size() == 1 && source.hasPermission(ECPermissions.CLEAR_OTHERS.get())){
+		if (args.size() == 1 && source.hasPermission(ECPermissions.CLEAR_OTHERS.get())){
 			return null;
 		}
 		return new ArrayList<String>();
@@ -77,22 +77,22 @@ public class ECClear extends ESubCommand<EverChat> {
 	public boolean subExecute(final CommandSource source, final List<String> args) throws CommandException {
 		boolean resultat = false;
 		
-		if(args.isEmpty()) {
+		if (args.isEmpty()) {
 			// Si la source est bien un joueur
-			if(source instanceof EPlayer) {
+			if (source instanceof EPlayer) {
 				resultat = commandClear((EPlayer) source);
 			// Si la source est une console ou un commande block
 			} else {
 				source.sendMessage(ECMessages.PREFIX.getText().concat(EAMessages.COMMAND_ERROR_FOR_PLAYER.getText()));
 			}
 		} else {
-			if(source.hasPermission(ECPermissions.CLEAR_OTHERS.get())) {
-				if(args.get(0).equals("*") || args.get(0).equalsIgnoreCase("all")) {
+			if (source.hasPermission(ECPermissions.CLEAR_OTHERS.get())) {
+				if (args.get(0).equals("*") || args.get(0).equalsIgnoreCase("all")) {
 					resultat = commandClearAll(source);
 				} else {
 					Optional<EPlayer> optPlayer = this.plugin.getEServer().getEPlayer(args.get(1));
 					// Le joueur existe
-					if(optPlayer.isPresent()){
+					if (optPlayer.isPresent()){
 						resultat = commandClearOthers(source, optPlayer.get());
 					// Le joueur est introuvable
 					} else {
@@ -113,7 +113,7 @@ public class ECClear extends ESubCommand<EverChat> {
 	}
 	
 	private boolean commandClearOthers(CommandSource staff, EPlayer player) throws CommandException{
-		if(!staff.equals(player)) {
+		if (!staff.equals(player)) {
 			player.sendMessage(CLEAR);
 			staff.sendMessage(EChat.of(ECMessages.PREFIX.get() + ECMessages.CLEAR_OTHERS.get()
 						.replaceAll("<player>", player.getDisplayName())));
@@ -126,8 +126,8 @@ public class ECClear extends ESubCommand<EverChat> {
 	}
 	
 	private boolean commandClearAll(CommandSource player){
-		for(EPlayer destination : this.plugin.getEServer().getOnlineEPlayers()){
-			if(!player.equals(destination)){
+		for (EPlayer destination : this.plugin.getEServer().getOnlineEPlayers()){
+			if (!player.equals(destination)){
 				player.sendMessage(CLEAR);
 				destination.sendMessage(ECMessages.PREFIX.get() + ECMessages.CLEAR_PLAYER.get()
 						.replaceAll("<player>", player.getName()));
