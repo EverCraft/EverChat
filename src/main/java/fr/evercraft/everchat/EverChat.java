@@ -21,6 +21,7 @@ import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
 
 import fr.evercraft.everapi.event.ChatSystemEvent;
+import fr.evercraft.everapi.event.ESpongeEventFactory;
 import fr.evercraft.everapi.plugin.EPlugin;
 import fr.evercraft.everapi.services.ChatService;
 import fr.evercraft.everchat.command.ECIcons;
@@ -28,7 +29,6 @@ import fr.evercraft.everchat.command.sub.ECClear;
 import fr.evercraft.everchat.command.sub.ECReload;
 import fr.evercraft.everchat.icons.ECIconsConfig;
 import fr.evercraft.everchat.service.EChatService;
-import fr.evercraft.everchat.service.event.EReloadChatSystemEvent;
 
 @Plugin(id = "fr.evercraft.everchat", 
 		name = "EverChat", 
@@ -86,7 +86,7 @@ public class EverChat extends EPlugin {
 	public void postEvent(ChatSystemEvent.Action action) {
 		if (action.equals(ChatSystemEvent.Action.RELOADED)) {
 			this.getLogger().debug("Event ChatSystemEvent.Reload");
-			this.getGame().getEventManager().post(new EReloadChatSystemEvent(Cause.source(this).build()));
+			this.getGame().getEventManager().post(ESpongeEventFactory.createChatSystemEventReload(Cause.source(this).build()));
 		}
 	}
 
