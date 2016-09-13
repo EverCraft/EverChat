@@ -20,6 +20,7 @@ import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
 
+import fr.evercraft.everapi.EverAPI;
 import fr.evercraft.everapi.event.ChatSystemEvent;
 import fr.evercraft.everapi.event.ESpongeEventFactory;
 import fr.evercraft.everapi.plugin.EPlugin;
@@ -30,14 +31,14 @@ import fr.evercraft.everchat.command.sub.ECReload;
 import fr.evercraft.everchat.icons.ECIconsConfig;
 import fr.evercraft.everchat.service.EChatService;
 
-@Plugin(id = "fr.evercraft.everchat", 
+@Plugin(id = "everchat", 
 		name = "EverChat", 
-		version = "1.2", 
+		version = EverAPI.VERSION, 
 		description = "Manage chat",
 		url = "http://evercraft.fr/",
 		authors = {"rexbut"},
 		dependencies = {
-		    @Dependency(id = "fr.evercraft.everapi", version = "1.2")
+		    @Dependency(id = "everapi", version = EverAPI.VERSION)
 		})
 public class EverChat extends EPlugin {
 	private ECConfig configs;
