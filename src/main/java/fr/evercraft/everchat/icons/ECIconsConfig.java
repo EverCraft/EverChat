@@ -25,7 +25,7 @@ import fr.evercraft.everapi.plugin.file.EConfig;
 import fr.evercraft.everchat.EverChat;
 import fr.evercraft.everchat.service.EChatService;
 
-public class ECIconsConfig extends EConfig {
+public class ECIconsConfig extends EConfig<EverChat> {
 
 	public ECIconsConfig(final EverChat plugin) {
 		super(plugin, "icons");

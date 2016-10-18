@@ -41,7 +41,7 @@ import fr.evercraft.everchat.service.EChatService;
 		    @Dependency(id = "everapi", version = EverAPI.VERSION),
 		    @Dependency(id = "spongeapi", version = EverAPI.SPONGEAPI_VERSION)
 		})
-public class EverChat extends EPlugin {
+public class EverChat extends EPlugin<EverChat> {
 	private ECConfig configs;
 	private ECIconsConfig icons;
 	

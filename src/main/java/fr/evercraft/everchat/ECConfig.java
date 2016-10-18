@@ -25,7 +25,7 @@ import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import fr.evercraft.everapi.plugin.file.EConfig;
 import fr.evercraft.everapi.plugin.file.EMessage;
 
-public class ECConfig extends EConfig {
+public class ECConfig extends EConfig<EverChat> {
 
 	public ECConfig(final EverChat plugin) {
 		super(plugin);
