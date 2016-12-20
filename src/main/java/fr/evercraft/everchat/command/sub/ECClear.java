@@ -27,7 +27,6 @@ import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
 import fr.evercraft.everapi.EAMessage.EAMessages;
-import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.command.ESubCommand;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everchat.ECMessage.ECMessages;
@@ -115,10 +114,12 @@ public class ECClear extends ESubCommand<EverChat> {
 	private boolean commandClearOthers(CommandSource staff, EPlayer player) throws CommandException{
 		if (!staff.equals(player)) {
 			player.sendMessage(CLEAR);
-			staff.sendMessage(EChat.of(ECMessages.PREFIX.get() + ECMessages.CLEAR_OTHERS.get()
-						.replaceAll("<player>", player.getDisplayName())));
-			player.sendMessage(ECMessages.PREFIX.get() + ECMessages.CLEAR_PLAYER.get()
-						.replaceAll("<player>", staff.getName()));
+			ECMessages.CLEAR_OTHERS.sender()
+				.replace("<player>", () -> player.getDisplayName())
+				.sendTo(staff);
+			ECMessages.CLEAR_PLAYER.sender()
+				.replace("<player>", () -> staff.getName())
+				.sendTo(player);
 			return true;
 		} else {
 			return this.commandClear(staff);
@@ -126,14 +127,15 @@ public class ECClear extends ESubCommand<EverChat> {
 	}
 	
 	private boolean commandClearAll(CommandSource player){
-		for (EPlayer destination : this.plugin.getEServer().getOnlineEPlayers()){
-			if (!player.equals(destination)){
+		for (EPlayer target : this.plugin.getEServer().getOnlineEPlayers()){
+			if (!player.equals(target)){
 				player.sendMessage(CLEAR);
-				destination.sendMessage(ECMessages.PREFIX.get() + ECMessages.CLEAR_PLAYER.get()
-						.replaceAll("<player>", player.getName()));
+				ECMessages.CLEAR_PLAYER.sender()
+					.replace("<player>", () -> player.getName())
+					.sendTo(target);
 			}
 		}
-		player.sendMessage(ECMessages.PREFIX.getText().concat(ECMessages.CLEAR_ALL.getText()));
+		ECMessages.CLEAR_ALL.sendTo(player);
 		return true;
 	}
 }

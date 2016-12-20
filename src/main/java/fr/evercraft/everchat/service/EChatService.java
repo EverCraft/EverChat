@@ -34,10 +34,11 @@ import org.spongepowered.api.text.Text;
 import com.google.common.base.Preconditions;
 
 import fr.evercraft.everapi.event.ChatSystemEvent;
+import fr.evercraft.everapi.message.format.EFormatString;
+import fr.evercraft.everapi.message.replace.EReplace;
 import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everapi.services.ChatService;
-import fr.evercraft.everapi.text.ETextBuilder;
 import fr.evercraft.everchat.ECMessage.ECMessages;
 import fr.evercraft.everchat.ECPermissions;
 import fr.evercraft.everchat.EverChat;
@@ -107,13 +108,13 @@ public class EChatService implements ChatService {
 		        if (this.icons.containsValue(value)) {
 					message = matcher.replaceFirst(value);
 				} else {
-					message = matcher.replaceFirst(ECMessages.ICON_UNKNOWN.get());
+					message = matcher.replaceFirst(ECMessages.ICON_UNKNOWN.getString());
 				}
 		    } catch(NumberFormatException | NullPointerException e) { 
 		    	if (this.icons.containsKey(name)) {
 					message = matcher.replaceFirst(this.icons.get(name));
 				} else {
-					message = matcher.replaceFirst(ECMessages.ICON_UNKNOWN.get());
+					message = matcher.replaceFirst(ECMessages.ICON_UNKNOWN.getString());
 				}
 		    }
 			matcher = pattern.matcher(message);
@@ -211,7 +212,11 @@ public class EChatService implements ChatService {
 		if (player.hasPermission(ECPermissions.ICONS.get())) {
 			original = this.plugin.getChat().replaceIcons(original);
 		}
-		return this.plugin.getChat().replaceFormat(player, ETextBuilder.toBuilder(format).replace("<MESSAGE>", EChat.of(original)));
+		
+		Map<String, EReplace<?>> replaces = this.plugin.getChat().getReplaceAll(player);
+		replaces.put("<MESSAGE>", EReplace.of(EChat.of(original)));
+		
+		return EFormatString.of(format).toText(replaces);
 	}
 	
 	/*

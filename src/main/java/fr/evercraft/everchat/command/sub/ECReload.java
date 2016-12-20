@@ -26,9 +26,7 @@ import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
 import fr.evercraft.everapi.EAMessage.EAMessages;
-import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.command.ESubCommand;
-import fr.evercraft.everchat.ECMessage.ECMessages;
 import fr.evercraft.everchat.ECPermissions;
 import fr.evercraft.everchat.ECCommand;
 import fr.evercraft.everchat.EverChat;
@@ -67,7 +65,7 @@ public class ECReload extends ESubCommand<EverChat> {
 
 	private boolean commandReload(final CommandSource player) {
 		this.plugin.reload();
-		player.sendMessage(EChat.of(ECMessages.PREFIX.get() + EAMessages.RELOAD_COMMAND.get()));
+		EAMessages.RELOAD_COMMAND.sendTo(player);
 		return true;
 	}
 }

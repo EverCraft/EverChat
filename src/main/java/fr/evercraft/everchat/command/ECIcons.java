@@ -29,7 +29,6 @@ import org.spongepowered.api.text.format.TextColors;
 
 import fr.evercraft.everapi.EAMessage.EAMessages;
 import fr.evercraft.everapi.java.UtilsList;
-import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.command.ECommand;
 import fr.evercraft.everchat.ECMessage.ECMessages;
 import fr.evercraft.everchat.ECPermissions;
@@ -56,7 +55,7 @@ public class ECIcons extends ECommand<EverChat> {
 
 	@Override
 	public Text help(final CommandSource source) {
-		return Text.builder("/icon [" + EAMessages.ARGS_ARGUMENTS.get() + "]")
+		return Text.builder("/icon [" + EAMessages.ARGS_ARGUMENTS.getString() + "]")
 				.onClick(TextActions.suggestCommand("/icon "))
 				.color(TextColors.RED)
 				.build();
@@ -183,10 +182,10 @@ public class ECIcons extends ECommand<EverChat> {
 	public Text getButtom(final String name, final String icon){
 		String id = getID(icon).toString();
 		return Text.builder(icon)
-					.onHover(TextActions.showText(EChat.of(ECMessages.ICON_HOVER.get()
-							.replaceAll("<id>", id)
-							.replaceAll("<icon>", icon)
-							.replaceAll("<name>", name))))
+					.onHover(TextActions.showText(ECMessages.ICON_HOVER.getFormat().toText(
+							"<id>", id,
+							"<icon>", icon,
+							"<name>", name)))
 					.onClick(TextActions.suggestCommand(icon))
 					.onShiftClick(TextActions.insertText(icon))
 					.build();
