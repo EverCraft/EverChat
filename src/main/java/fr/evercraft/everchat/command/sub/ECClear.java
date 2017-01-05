@@ -79,27 +79,33 @@ public class ECClear extends ESubCommand<EverChat> {
 		if (args.isEmpty()) {
 			// Si la source est bien un joueur
 			if (source instanceof EPlayer) {
-				resultat = commandClear((EPlayer) source);
+				resultat = this.commandClear((EPlayer) source);
 			// Si la source est une console ou un commande block
 			} else {
-				source.sendMessage(ECMessages.PREFIX.getText().concat(EAMessages.COMMAND_ERROR_FOR_PLAYER.getText()));
+				EAMessages.COMMAND_ERROR_FOR_PLAYER.sender()
+					.prefix(ECMessages.PREFIX)
+					.sendTo(source);
 			}
 		} else {
 			if (source.hasPermission(ECPermissions.CLEAR_OTHERS.get())) {
 				if (args.get(0).equals("*") || args.get(0).equalsIgnoreCase("all")) {
-					resultat = commandClearAll(source);
+					resultat = this.commandClearAll(source);
 				} else {
 					Optional<EPlayer> optPlayer = this.plugin.getEServer().getEPlayer(args.get(1));
 					// Le joueur existe
 					if (optPlayer.isPresent()){
-						resultat = commandClearOthers(source, optPlayer.get());
+						resultat = this.commandClearOthers(source, optPlayer.get());
 					// Le joueur est introuvable
 					} else {
-						source.sendMessage(ECMessages.PREFIX.getText().concat(EAMessages.PLAYER_NOT_FOUND.getText()));
+						EAMessages.PLAYER_NOT_FOUND.sender()
+							.prefix(ECMessages.PREFIX)
+							.sendTo(source);
 					}
 				}
 			} else {
-				source.sendMessage(EAMessages.NO_PERMISSION.getText());
+				EAMessages.NO_PERMISSION.sender()
+					.prefix(ECMessages.PREFIX)
+					.sendTo(source);
 			}
 		}
 		
