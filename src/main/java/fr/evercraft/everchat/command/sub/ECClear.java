@@ -16,7 +16,7 @@
  */
 package fr.evercraft.everchat.command.sub;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -55,14 +55,14 @@ public class ECClear extends ESubCommand<EverChat> {
 	
 	public Collection<String> subTabCompleter(final CommandSource source, final List<String> args) throws CommandException {
 		if (args.size() == 1 && source.hasPermission(ECPermissions.CLEAR_OTHERS.get())){
-			return null;
+			return this.getAllPlayers(source, true);
 		}
-		return new ArrayList<String>();
+		return Arrays.asList();
 	}
 
 	public Text help(final CommandSource source) {
 		if (source.hasPermission(ECPermissions.CLEAR_OTHERS.get())){
-			return Text.builder("/" + this.getName() + " clear [joueur|*]")
+			return Text.builder("/" + this.getName() + " clear [" + EAMessages.ARGS_PLAYER + "|*]")
 						.onClick(TextActions.suggestCommand("/" + this.getName() + " clear"))
 						.color(TextColors.RED)
 						.build();
