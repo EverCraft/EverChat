@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import fr.evercraft.everapi.plugin.file.EConfig;
 import fr.evercraft.everapi.plugin.file.EMessage;
@@ -44,23 +43,21 @@ public class ECConfig extends EConfig<EverChat> {
 		addDefault("enable-format", true);
 		addDefault("enable-icons", true);
 		
-		ConfigurationNode replaces = this.get("replaces");
-		if (replaces.getValue() == null) {
-			replaces.getNode("[<3]").setValue("\u2764");
-			replaces.getNode("[check]").setValue("\u2714");
-			replaces.getNode("[*]").setValue("\u2716");
-			replaces.getNode("[ARROW]").setValue("\u279c");
-			replaces.getNode("[X]").setValue("\u2588");
-			replaces.getNode("[RT]").setValue("\n");
-		}
+		Map<String, String> replaces = new HashMap<String, String>();
+		replaces.put("[<3]", "\u2764");
+		replaces.put("[check]", "\u2714");
+		replaces.put("[*]", "\u2716");
+		replaces.put("[ARROW]", "\u279c");
+		replaces.put("[X]", "\u2588");
+		replaces.put("[RT]", "\n");
+		addDefault("replaces", replaces);
 		
 		addDefault("format-default", "<DISPLAYNAME_FORMAT> &7:&f <MESSAGE>");
 		
-		ConfigurationNode formats = this.get("format-groups");
-		if (formats.getValue() == null) {
-			formats.getNode("Admin").setValue("&f[&4Admin&f] <DISPLAYNAME_FORMAT> &7:&f <MESSAGE>");
-			formats.getNode("Moderator").setValue("&f[&5Moderator&f] <DISPLAYNAME_FORMAT> &7:&f <MESSAGE>");
-		}
+		Map<String, String> formats = new HashMap<String, String>();
+		formats.put("Admin", "&f[&4Admin&f] <DISPLAYNAME_FORMAT> &7:&f <MESSAGE>");
+		formats.put("Moderator", "&f[&5Moderator&f] <DISPLAYNAME_FORMAT> &7:&f <MESSAGE>");
+		addDefault("format-groups", formats);
 	}
 	
 	public Map<String, String> getReplaces() {
