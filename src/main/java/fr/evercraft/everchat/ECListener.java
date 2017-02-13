@@ -16,8 +16,6 @@
  */
 package fr.evercraft.everchat;
 
-import java.util.Optional;
-
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.filter.cause.First;
@@ -34,12 +32,10 @@ public class ECListener {
 	}
 	
     @Listener
-    public void onPlayerWriteChat(MessageChannelEvent.Chat event, @First Player player) {
+    public void onPlayerWriteChat(MessageChannelEvent.Chat event, @First Player player_sponge) {
     	if (this.plugin.getConfigs().enableFormat()) {
-			Optional<EPlayer> eplayer = this.plugin.getEServer().getEPlayer(player);
-			if (eplayer.isPresent()){
-				event.setMessage(this.plugin.getService().sendMessage(eplayer.get(), TextSerializers.formattingCode('&').serialize(event.getRawMessage())));
-			}
+			EPlayer player = this.plugin.getEServer().getEPlayer(player_sponge);
+			event.setMessage(this.plugin.getService().sendMessage(player, TextSerializers.formattingCode('&').serialize(event.getRawMessage())));
     	}
     }
 }
