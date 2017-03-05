@@ -42,10 +42,9 @@ import fr.evercraft.everapi.services.ChatService;
 import fr.evercraft.everchat.ECMessage.ECMessages;
 import fr.evercraft.everchat.ECPermissions;
 import fr.evercraft.everchat.EverChat;
+import fr.evercraft.everchat.icons.UtilsIcons;
 
 public class EChatService implements ChatService {
-	public static final int CHARACTER = 36864;
-	
 	private final EverChat plugin;
 	
 	private final ConcurrentMap<String, String> character;
@@ -104,7 +103,7 @@ public class EChatService implements ChatService {
 		while(matcher.find()) {
 			String name = matcher.group(2);
 			try { 
-		        String value = String.valueOf((char)(CHARACTER + Integer.parseInt(name)));
+		        String value = String.valueOf((char)(UtilsIcons.CHARACTER + Integer.parseInt(name)));
 		        if (this.icons.containsValue(value)) {
 					message = matcher.replaceFirst(value);
 				} else {

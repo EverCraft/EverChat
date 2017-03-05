@@ -19,7 +19,6 @@ package fr.evercraft.everchat;
 import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
-
 import fr.evercraft.everapi.EverAPI;
 import fr.evercraft.everapi.event.ChatSystemEvent;
 import fr.evercraft.everapi.event.ESpongeEventFactory;
@@ -49,8 +48,12 @@ public class EverChat extends EPlugin<EverChat> {
 	
 	private EChatService service;
 	
+	public EverChat() {
+		
+	}
+	
 	@Override
-	protected void onPreEnable() {		
+	protected void onPreEnable() {
 		this.configs = new ECConfig(this);
 		this.icons = new ECIconsConfig(this);
 		

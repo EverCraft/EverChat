@@ -21,9 +21,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import ninja.leaping.configurate.ConfigurationNode;
+
 import fr.evercraft.everapi.plugin.file.EConfig;
 import fr.evercraft.everchat.EverChat;
-import fr.evercraft.everchat.service.EChatService;
 
 public class ECIconsConfig extends EConfig<EverChat> {
 
@@ -2371,7 +2371,7 @@ public class ECIconsConfig extends EConfig<EverChat> {
 		for (Entry<Object, ? extends ConfigurationNode> node : this.getNode().getChildrenMap().entrySet()) {
 			if (node.getKey() instanceof String) {
 				try {
-					replaces.put(((String) node.getKey()).toUpperCase(), String.valueOf((char)(EChatService.CHARACTER + node.getValue().getInt(0))));
+					replaces.put(((String) node.getKey()).toUpperCase(), String.valueOf((char)(UtilsIcons.CHARACTER + node.getValue().getInt(0))));
 				} catch (NumberFormatException e) {}
 			}
 		}

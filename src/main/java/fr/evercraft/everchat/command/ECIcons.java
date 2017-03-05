@@ -35,7 +35,7 @@ import fr.evercraft.everapi.plugin.command.ECommand;
 import fr.evercraft.everchat.ECMessage.ECMessages;
 import fr.evercraft.everchat.ECPermissions;
 import fr.evercraft.everchat.EverChat;
-import fr.evercraft.everchat.service.EChatService;
+import fr.evercraft.everchat.icons.UtilsIcons;
 
 public class ECIcons extends ECommand<EverChat> {
 	private final static int MAX_CARACTER = 35;
@@ -196,7 +196,7 @@ public class ECIcons extends ECommand<EverChat> {
 	public Integer getID(final String icon){
 		char[] caractere = icon.toCharArray();
 		if (caractere.length >= 1) {
-			return ((int) caractere[0]) - EChatService.CHARACTER;
+			return ((int) caractere[0]) - UtilsIcons.CHARACTER;
 		}
 		return -1;
 	}
