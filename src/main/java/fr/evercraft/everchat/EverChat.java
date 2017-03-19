@@ -90,7 +90,7 @@ public class EverChat extends EPlugin<EverChat> {
 	
 	public void postEvent(ChatSystemEvent.Action action) {
 		if (action.equals(ChatSystemEvent.Action.RELOADED)) {
-			this.getLogger().debug("Event ChatSystemEvent.Reload");
+			this.getELogger().debug("Event ChatSystemEvent.Reload");
 			this.getGame().getEventManager().post(ESpongeEventFactory.createChatSystemEventReload(Cause.source(this).build()));
 		}
 	}
