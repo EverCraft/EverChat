@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
+import fr.evercraft.everapi.message.replace.EReplacesPlayer;
 import fr.evercraft.everapi.plugin.file.EConfig;
 import fr.evercraft.everapi.plugin.file.EMessage;
 
@@ -52,11 +53,11 @@ public class ECConfig extends EConfig<EverChat> {
 		replaces.put("[RT]", "\n");
 		addDefault("replaces", replaces);
 		
-		addDefault("format-default", "<DISPLAYNAME_FORMAT> &7:&f <MESSAGE>");
+		addDefault("format-default", EReplacesPlayer.DISPLAYNAME.getName() + " &7:&f <MESSAGE>");
 		
 		Map<String, String> formats = new HashMap<String, String>();
-		formats.put("Admin", "&f[&4Admin&f] <DISPLAYNAME_FORMAT> &7:&f <MESSAGE>");
-		formats.put("Moderator", "&f[&5Moderator&f] <DISPLAYNAME_FORMAT> &7:&f <MESSAGE>");
+		formats.put("Admin", "&f[&4Admin&f] " + EReplacesPlayer.DISPLAYNAME.getName() + " &7:&f <MESSAGE>");
+		formats.put("Moderator", "&f[&5Moderator&f] " + EReplacesPlayer.DISPLAYNAME.getName() + " &7:&f <MESSAGE>");
 		addDefault("format-groups", formats);
 	}
 	
