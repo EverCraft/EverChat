@@ -28,6 +28,7 @@ import fr.evercraft.everchat.command.ECIcons;
 import fr.evercraft.everchat.command.sub.ECClear;
 import fr.evercraft.everchat.command.sub.ECReload;
 import fr.evercraft.everchat.icons.ECIconsConfig;
+import fr.evercraft.everchat.icons.UtilsIcons;
 import fr.evercraft.everchat.service.EChatService;
 
 @Plugin(id = "everchat", 
@@ -78,6 +79,14 @@ public class EverChat extends EPlugin<EverChat> {
 		
 		command.add(new ECClear(this, command));
 		command.add(new ECReload(this, command));
+		try {
+			UtilsIcons.init();
+			this.getLogger().info("[Icons] Editing SpongeCommon "
+					+ "(Class='org.spongepowered.common.service.pagination.PaginationCalculator';Variable='UNICODE_CHAR_WIDTHS')");
+		} catch (Exception e) {
+			this.getLogger().warn("[Icons] Error during SpongeCommon modification "
+					+ "(Class='org.spongepowered.common.service.pagination.PaginationCalculator';Variable='UNICODE_CHAR_WIDTHS') : " + e);
+		}
 	}
 
 	protected void onReload(){

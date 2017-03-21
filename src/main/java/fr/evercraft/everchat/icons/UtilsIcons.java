@@ -16,7 +16,23 @@
  */
 package fr.evercraft.everchat.icons;
 
+import java.lang.reflect.Field;
+
 public class UtilsIcons {
 	public static final int CHARACTER = 58112;
 	public static final int COUNT = 5631;
+	
+	// Fix : https://github.com/SpongePowered/SpongeAPI/issues/1512
+	public static void init() throws Exception {
+		Class<?> clazz = Class.forName("org.spongepowered.common.service.pagination.PaginationCalculator");
+		Field field = clazz.getDeclaredField("UNICODE_CHAR_WIDTHS");
+		field.setAccessible(true);
+		Object object = field.get(null);
+		if (object instanceof byte[]) {
+			byte[] unicodeCharWidths = (byte[]) object;
+			for (int cpt=CHARACTER; cpt < CHARACTER + COUNT; cpt++) {
+				unicodeCharWidths[cpt] = 15;
+			}
+		}
+	}
 }
