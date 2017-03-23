@@ -212,8 +212,8 @@ public class EChatService implements ChatService {
 			original = this.plugin.getChat().replaceIcons(original);
 		}
 		
-		Map<String, EReplace<?>> replaces = this.plugin.getChat().getReplaceAll(player);
-		replaces.put("<MESSAGE>", EReplace.of(EChat.of(original)));
+		Map<Pattern, EReplace<?>> replaces = this.plugin.getChat().getReplaceAll(player);
+		replaces.put(Pattern.compile("<MESSAGE>"), EReplace.of(EChat.of(original)));
 		
 		return EFormatString.of(format).toText(replaces);
 	}
