@@ -68,10 +68,10 @@ public class ECMessage extends EMessage<EverChat> {
 	    private final EMessageBuilder french;
 	    private final EMessageBuilder english;
 	    private EMessageFormat message;
+	    private EMessageBuilder builder;
 	    
 	    private ECMessages(final String path, final String french) {   	
-	    	this(path, 
-	    		EMessageFormat.builder().chat(new EFormatString(french), true));
+	    	this(path, EMessageFormat.builder().chat(new EFormatString(french), true));
 	    }
 	    
 	    private ECMessages(final String path, final String french, final String english) {   	
@@ -113,8 +113,13 @@ public class ECMessage extends EMessage<EverChat> {
 			return this.message;
 		}
 		
-		public void set(EMessageFormat message) {
-			this.message = message;
+		public EMessageBuilder getBuilder() {
+			return this.builder;
+		}
+		
+		public void set(EMessageBuilder message) {
+			this.message = message.build();
+			this.builder = message;
 		}
 	}
 }
