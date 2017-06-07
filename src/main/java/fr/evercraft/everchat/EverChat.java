@@ -81,10 +81,10 @@ public class EverChat extends EPlugin<EverChat> {
 		command.add(new ECReload(this, command));
 		try {
 			UtilsIcons.init();
-			this.getLogger().info("[Icons] Editing SpongeCommon "
+			this.getELogger().info("[Icons] Editing SpongeCommon "
 					+ "(Class='org.spongepowered.common.service.pagination.PaginationCalculator';Variable='UNICODE_CHAR_WIDTHS')");
 		} catch (Exception e) {
-			this.getLogger().warn("[Icons] Error during SpongeCommon modification "
+			this.getELogger().warn("[Icons] Error during SpongeCommon modification "
 					+ "(Class='org.spongepowered.common.service.pagination.PaginationCalculator';Variable='UNICODE_CHAR_WIDTHS') : " + e);
 		}
 	}
