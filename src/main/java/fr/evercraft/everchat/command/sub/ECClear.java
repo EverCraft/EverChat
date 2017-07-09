@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandSource;
@@ -53,7 +54,7 @@ public class ECClear extends ESubCommand<EverChat> {
 		return ECMessages.CLEAR_DESCRIPTION.getText();
 	}
 	
-	public Collection<String> subTabCompleter(final CommandSource source, final List<String> args) throws CommandException {
+	public Collection<String> tabCompleter(final CommandSource source, final List<String> args) throws CommandException {
 		if (args.size() == 1 && source.hasPermission(ECPermissions.CLEAR_OTHERS.get())){
 			return this.getAllPlayers(source, true);
 		}
@@ -74,13 +75,11 @@ public class ECClear extends ESubCommand<EverChat> {
 		}
 	}
 	
-	public boolean subExecute(final CommandSource source, final List<String> args) throws CommandException {
-		boolean resultat = false;
-		
+	public CompletableFuture<Boolean> execute(final CommandSource source, final List<String> args) throws CommandException {
 		if (args.isEmpty()) {
 			// Si la source est bien un joueur
 			if (source instanceof EPlayer) {
-				resultat = this.commandClear((EPlayer) source);
+				return this.commandClear((EPlayer) source);
 			// Si la source est une console ou un commande block
 			} else {
 				EAMessages.COMMAND_ERROR_FOR_PLAYER.sender()
@@ -90,12 +89,12 @@ public class ECClear extends ESubCommand<EverChat> {
 		} else {
 			if (source.hasPermission(ECPermissions.CLEAR_OTHERS.get())) {
 				if (args.get(0).equals("*") || args.get(0).equalsIgnoreCase("all")) {
-					resultat = this.commandClearAll(source);
+					return this.commandClearAll(source);
 				} else {
 					Optional<EPlayer> optPlayer = this.plugin.getEServer().getEPlayer(args.get(1));
 					// Le joueur existe
 					if (optPlayer.isPresent()){
-						resultat = this.commandClearOthers(source, optPlayer.get());
+						return this.commandClearOthers(source, optPlayer.get());
 					// Le joueur est introuvable
 					} else {
 						EAMessages.PLAYER_NOT_FOUND.sender()
@@ -110,15 +109,15 @@ public class ECClear extends ESubCommand<EverChat> {
 			}
 		}
 		
-		return resultat;
+		return CompletableFuture.completedFuture(false);
 	}
 
-	private boolean commandClear(CommandSource player) {
+	private CompletableFuture<Boolean> commandClear(CommandSource player) {
 		player.sendMessage(CLEAR);
-		return true;
+		return CompletableFuture.completedFuture(true);
 	}
 	
-	private boolean commandClearOthers(CommandSource staff, EPlayer player) throws CommandException{
+	private CompletableFuture<Boolean> commandClearOthers(CommandSource staff, EPlayer player) throws CommandException{
 		if (!staff.equals(player)) {
 			player.sendMessage(CLEAR);
 			ECMessages.CLEAR_OTHERS.sender()
@@ -127,13 +126,13 @@ public class ECClear extends ESubCommand<EverChat> {
 			ECMessages.CLEAR_PLAYER.sender()
 				.replace("<player>", () -> staff.getName())
 				.sendTo(player);
-			return true;
+			return CompletableFuture.completedFuture(true);
 		} else {
 			return this.commandClear(staff);
 		}
 	}
 	
-	private boolean commandClearAll(CommandSource player){
+	private CompletableFuture<Boolean> commandClearAll(CommandSource player){
 		for (EPlayer target : this.plugin.getEServer().getOnlineEPlayers()){
 			if (!player.equals(target)){
 				player.sendMessage(CLEAR);
@@ -143,6 +142,6 @@ public class ECClear extends ESubCommand<EverChat> {
 			}
 		}
 		ECMessages.CLEAR_ALL.sendTo(player);
-		return true;
+		return CompletableFuture.completedFuture(true);
 	}
 }

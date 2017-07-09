@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.concurrent.CompletableFuture;
 
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandSource;
@@ -69,21 +70,19 @@ public class ECIcons extends ECommand<EverChat> {
 	}
 	
 	@Override
-	public boolean execute(final CommandSource source, final List<String> args) throws CommandException {
-		boolean resultat = false;
+	public CompletableFuture<Boolean> execute(final CommandSource source, final List<String> args) throws CommandException {
 		if (args.size() == 0) {
-			commandList(source);
+			return this.commandList(source);
 		} else {
-			resultat = commandSearch(source, args);
+			return this.commandSearch(source, args);
 		}
-		return resultat;
 	}
 	
 	/*
 	 * List
 	 */
 
-	private boolean commandList(CommandSource player) {
+	private CompletableFuture<Boolean> commandList(CommandSource player) {
 		List<Text> lists = new ArrayList<Text>();
 		
 		Text line = Text.of();
@@ -116,14 +115,14 @@ public class ECIcons extends ECommand<EverChat> {
 					.onClick(TextActions.runCommand("/icon"))
 					.build(), 
 				lists, player);
-		return true;
+		return CompletableFuture.completedFuture(true);
 	}
 	
 	/*
 	 * Search
 	 */
 	
-	private boolean commandSearch(final CommandSource player, List<String> args) {
+	private CompletableFuture<Boolean> commandSearch(final CommandSource player, List<String> args) {
 		args = UtilsList.toLowerCase(args);
 		List<Text> lists = new ArrayList<Text>();
 		
@@ -161,7 +160,7 @@ public class ECIcons extends ECommand<EverChat> {
 					.onClick(TextActions.runCommand("/icon " + String.join(" ", args)))
 					.build(), 
 				lists, player);
-		return true;
+		return CompletableFuture.completedFuture(true);
 	}
 	
 	public boolean contains(final String message, final List<String> args) {
