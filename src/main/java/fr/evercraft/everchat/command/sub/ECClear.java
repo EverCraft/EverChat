@@ -99,6 +99,7 @@ public class ECClear extends ESubCommand<EverChat> {
 					} else {
 						EAMessages.PLAYER_NOT_FOUND.sender()
 							.prefix(ECMessages.PREFIX)
+							.replace("<player>", args.get(1))
 							.sendTo(source);
 					}
 				}
