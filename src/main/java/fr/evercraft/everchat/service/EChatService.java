@@ -29,6 +29,7 @@ import java.util.regex.Pattern;
 
 import org.spongepowered.api.service.context.Context;
 import org.spongepowered.api.service.permission.Subject;
+import org.spongepowered.api.service.permission.SubjectReference;
 import org.spongepowered.api.text.Text;
 
 import com.google.common.base.Preconditions;
@@ -168,10 +169,10 @@ public class EChatService implements ChatService {
 		Preconditions.checkNotNull(subject, "subject");
 		
 		String format = null;
-		Optional<Subject> group = this.getGroup(subject, contexts);
+		Optional<SubjectReference> group = this.getGroup(subject, contexts);
 		
 		if (group.isPresent()) {
-			format = this.format.get(group.get().getIdentifier());
+			format = this.format.get(group.get().getSubjectIdentifier());
 		}
 		
 		if (format == null) {
@@ -180,11 +181,11 @@ public class EChatService implements ChatService {
         return format;
     }
 	
-	private Optional<Subject> getGroup(final Subject subject, final Set<Context> contexts) {
+	private Optional<SubjectReference> getGroup(final Subject subject, final Set<Context> contexts) {
 		Preconditions.checkNotNull(subject, "subject");
 		Preconditions.checkNotNull(contexts, "contexts");
 		
-		List<Subject> groups = subject.getSubjectData().getParents(contexts);
+		List<SubjectReference> groups = subject.getSubjectData().getParents(contexts);
 		if (!groups.isEmpty()) {
 			return Optional.of(groups.get(0));
 		}
