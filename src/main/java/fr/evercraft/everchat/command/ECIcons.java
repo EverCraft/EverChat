@@ -184,9 +184,9 @@ public class ECIcons extends ECommand<EverChat> {
 		String id = getID(icon).toString();
 		return Text.builder(icon)
 					.onHover(TextActions.showText(ECMessages.ICON_HOVER.getFormat().toText(
-							"<id>", id,
-							"<icon>", icon,
-							"<name>", name)))
+							"{id}", id,
+							"{icon}", icon,
+							"{name}", name)))
 					.onClick(TextActions.suggestCommand(icon))
 					.onShiftClick(TextActions.insertText(icon))
 					.build();

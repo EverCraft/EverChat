@@ -99,7 +99,7 @@ public class ECClear extends ESubCommand<EverChat> {
 					} else {
 						EAMessages.PLAYER_NOT_FOUND.sender()
 							.prefix(ECMessages.PREFIX)
-							.replace("<player>", args.get(1))
+							.replace("{player}", args.get(1))
 							.sendTo(source);
 					}
 				}
@@ -122,10 +122,10 @@ public class ECClear extends ESubCommand<EverChat> {
 		if (!staff.equals(player)) {
 			player.sendMessage(CLEAR);
 			ECMessages.CLEAR_OTHERS.sender()
-				.replace("<player>", () -> player.getDisplayName())
+				.replace("{player}", () -> player.getDisplayName())
 				.sendTo(staff);
 			ECMessages.CLEAR_PLAYER.sender()
-				.replace("<player>", () -> staff.getName())
+				.replace("{player}", () -> staff.getName())
 				.sendTo(player);
 			return CompletableFuture.completedFuture(true);
 		} else {
@@ -138,7 +138,7 @@ public class ECClear extends ESubCommand<EverChat> {
 			if (!player.equals(target)){
 				player.sendMessage(CLEAR);
 				ECMessages.CLEAR_PLAYER.sender()
-					.replace("<player>", () -> player.getName())
+					.replace("{player}", () -> player.getName())
 					.sendTo(target);
 			}
 		}

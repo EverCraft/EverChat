@@ -39,9 +39,9 @@ public class ECMessage extends EMessage<EverChat> {
 		CLEAR_DESCRIPTION("clear.description",
 				"Efface le chat du jeu"),
 		CLEAR_PLAYER("clear.player",
-				"&7Votre chat a été effacé par &6<player>&7."),
+				"&7Votre chat a été effacé par &6{player}&7."),
 		CLEAR_OTHERS("clear.others",
-				"&7Vous avez effacé le chat de &6<player>&7."),
+				"&7Vous avez effacé le chat de &6{player}&7."),
 		CLEAR_ALL("clear.all",
 				"&7Vous avez effacé le chat de tous les joueurs."),
 		ICON_DESCRIPTION("icon.description", 
@@ -60,9 +60,9 @@ public class ECMessage extends EMessage<EverChat> {
 				"&aAucune icône trouvée", 
 				"&aNo found icon"),
 		ICON_HOVER("icon.hover", 
-				"&7Numéro : &a<id>[RT]&7Nom : &a<name>", 
-				"&7ID : &a<id>[RT]&7Name : &a<name>"),
-		ICON_UNKNOWN("icon.unknown", "<icon=UNKNOWN>");
+				"&7Numéro : &a{id>[RT]&7Nom : &a{name}", 
+				"&7ID : &a{id>[RT]&7Name : &a{name}"),
+		ICON_UNKNOWN("icon.unknown", "{icon=UNKNOWN}");
 		
 		private final String path;
 	    private final EMessageBuilder french;
