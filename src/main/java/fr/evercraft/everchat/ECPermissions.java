@@ -35,6 +35,7 @@ public enum ECPermissions implements EnumPermission {
 	FORMAT("replace.format"),
 	MAGIC("replace.magic"),
 	CHARACTER("replace.character"),
+	COMMAND("replace.command"),
 	ICONS("replace.icons"),
 	
 	ICON_COMMAND("icon");

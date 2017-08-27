@@ -16,28 +16,27 @@
  */
 package fr.evercraft.everchat.service;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.spongepowered.api.service.context.Context;
 import org.spongepowered.api.service.permission.Subject;
 import org.spongepowered.api.service.permission.SubjectReference;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.action.TextActions;
 
 import com.google.common.base.Preconditions;
 
+import fr.evercraft.everapi.EAMessage.EAMessages;
 import fr.evercraft.everapi.event.ChatSystemEvent;
 import fr.evercraft.everapi.message.format.EFormatString;
 import fr.evercraft.everapi.message.replace.EReplace;
-import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everapi.services.ChatService;
 import fr.evercraft.everchat.ECMessage.ECMessages;
@@ -46,17 +45,21 @@ import fr.evercraft.everchat.EverChat;
 import fr.evercraft.everchat.icons.UtilsIcons;
 
 public class EChatService implements ChatService {
+	private static final Pattern REPLACE_ICONS = Pattern.compile("<(?:icon|Icon|ICON)=(.*?)>");
+	private static final Pattern REPLACE_COMMAND = Pattern.compile("\"/(.*?)\"");
+	
 	private final EverChat plugin;
 	
-	private final ConcurrentMap<String, String> character;
 	private final ConcurrentMap<String, String> icons;
+	
+	private final ConcurrentMap<Pattern, EReplace<?>> replaces;
 	
 	private final ConcurrentMap<String, String> format;
 	
 	public EChatService(final EverChat plugin) {
 		this.plugin = plugin;
 		
-		this.character = new ConcurrentHashMap<String, String>();
+		this.replaces = new ConcurrentHashMap<Pattern, EReplace<?>>();
 		this.icons = new ConcurrentHashMap<String, String>();
 		
 		this.format = new ConcurrentHashMap<String, String>();
@@ -65,95 +68,64 @@ public class EChatService implements ChatService {
 	}
 	
 	public void reload() {
-		this.character.putAll(this.plugin.getConfigs().getReplaces());
-		this.icons.putAll(this.plugin.getConfigsIcons().getAllIcons());
+		this.icons.clear();
+		this.replaces.clear();
 		
+		this.icons.putAll(this.plugin.getConfigsIcons().getAllIcons());
 		this.format.putAll(this.plugin.getConfigs().getFormatGroups());
+		
+		this.plugin.getConfigs().getReplaces().forEach((key, value) -> {
+			key = key.replace("[", "\\[").replace("{", "\\{").replace("(", "\\(").replace("*", "\\*");
+			this.replaces.put(Pattern.compile(key), EReplace.of(value));
+		});
 		
 		this.plugin.postEvent(ChatSystemEvent.Action.RELOADED);
 	}
 	
-	/*
-	 * Un message
-	 */
-	
 	@Override
-	public String replace(String message) {
-		Preconditions.checkNotNull(message, "message");
-		
-		message = replaceCharacter(message);
-		message = replaceIcons(message);
-		return message;
+	public Map<Pattern, EReplace<?>> getReplaceAll() {
+		Map<Pattern, EReplace<?>> builder = this.getReplaceCharacters();
+		builder.putAll(this.getReplaceIcons());
+		builder.putAll(this.getReplaceCommand());
+		return builder;
 	}
 	
 	@Override
-	public String replaceCharacter(String message) {
-		Preconditions.checkNotNull(message, "message");
-		for (Entry<String, String> replace : this.character.entrySet()) {
-			message = message.replace(replace.getKey(), replace.getValue());
-		}
-		return message;
-    }
+	public Map<Pattern, EReplace<?>> getReplaceCharacters() {
+		return new HashMap<Pattern, EReplace<?>>(this.replaces);
+	}
 	
 	@Override
-	public String replaceIcons(String message) {
-		Preconditions.checkNotNull(message, "message");
-		
-		Pattern pattern = Pattern.compile("<(icon|Icon|ICON)=(.*?)>");
-		Matcher matcher = pattern.matcher(message);
-		while(matcher.find()) {
-			String name = matcher.group(2);
+	public Map<Pattern, EReplace<?>> getReplaceIcons() {
+		HashMap<Pattern, EReplace<?>> builder = new HashMap<Pattern, EReplace<?>>();
+		builder.put(REPLACE_ICONS, EReplace.of(key -> {
+			System.out.println("icon : " + key);
 			try { 
-		        String value = String.valueOf((char)(UtilsIcons.CHARACTER + Integer.parseInt(name)));
+		        String value = String.valueOf((char)(UtilsIcons.CHARACTER + Integer.parseInt(key)));
 		        if (this.icons.containsValue(value)) {
-					message = matcher.replaceFirst(value);
-				} else {
-					message = matcher.replaceFirst(ECMessages.ICON_UNKNOWN.getString());
+		        	return value;
 				}
 		    } catch(NumberFormatException | NullPointerException e) { 
-		    	if (this.icons.containsKey(name)) {
-					message = matcher.replaceFirst(this.icons.get(name));
-				} else {
-					message = matcher.replaceFirst(ECMessages.ICON_UNKNOWN.getString());
+		    	String value = this.icons.get(key);
+		    	if (value != null) {
+					return value;
 				}
 		    }
-			matcher = pattern.matcher(message);
-        }
-		return message;
-    }
-	
-	/*
-	 * Liste de message
-	 */
-	
-	@Override
-	public List<String> replace(List<String> messages) {
-		Preconditions.checkNotNull(messages, "messages");
-		
-		messages = replaceCharacter(messages);
-		messages = replaceIcons(messages);
-		return messages;
+			return ECMessages.ICON_UNKNOWN.getString();
+		}));
+		return builder;
 	}
 	
-	public List<String> replaceCharacter(final List<String> messages) {
-		Preconditions.checkNotNull(messages, "messages");
-		
-		List<String> list = new ArrayList<String>();
-        for (String message : messages){
-        	list.add(this.replaceCharacter(message));
-        }
-        return list;
-    }
-	
-	public List<String> replaceIcons(final List<String> messages) {
-		Preconditions.checkNotNull(messages, "messages");
-		
-		List<String> list = new ArrayList<String>();
-        for (String message : messages){
-        	list.add(this.replaceIcons(message));
-        }
-        return list;
-    }
+	@Override
+	public Map<Pattern, EReplace<?>> getReplaceCommand() {
+		HashMap<Pattern, EReplace<?>> builder = new HashMap<Pattern, EReplace<?>>();
+		builder.put(REPLACE_COMMAND, EReplace.of(value -> Text.builder("/" + value)
+				.onHover(TextActions.showText(EAMessages.HOVER_COPY.getText()))
+				.onClick(TextActions.suggestCommand("/" + value))
+				.onShiftClick(TextActions.insertText("/" + value))
+			.build()));
+		return builder;
+	}
 	
 	/*
 	 * Format
@@ -194,27 +166,28 @@ public class EChatService implements ChatService {
 	
 	public Text sendMessage(final EPlayer player, String original) {
 		String format = this.getFormat(player.getPlayer().get());
-		format = this.plugin.getChat().replaceGlobal(format);
-		format = this.plugin.getChat().replacePlayer(player, format);
+		Map<Pattern, EReplace<?>> replaces = player.getReplaces();
 		
 		if (!player.hasPermission(ECPermissions.COLOR.get())) {
-			original = original.replaceAll(EChat.REGEX_COLOR, "");
+			original = original.replaceAll(ChatService.REGEX_COLOR, "");
 		}
 		if (!player.hasPermission(ECPermissions.FORMAT.get())) {
-			original = original.replaceAll(EChat.REGEX_FORMAT, "");
+			original = original.replaceAll(ChatService.REGEX_FORMAT, "");
 		}
 		if (!player.hasPermission(ECPermissions.MAGIC.get())) {
-			original = original.replaceAll(EChat.REGEX_MAGIC, "");
+			original = original.replaceAll(ChatService.REGEX_MAGIC, "");
 		}
 		if (player.hasPermission(ECPermissions.CHARACTER.get())) {
-			original = this.plugin.getChat().replaceCharacter(original);
+			replaces.putAll(this.getReplaceCharacters());
+		}
+		if (player.hasPermission(ECPermissions.COMMAND.get())) {
+			replaces.putAll(this.getReplaceCommand());
 		}
 		if (player.hasPermission(ECPermissions.ICONS.get())) {
-			original = this.plugin.getChat().replaceIcons(original);
+			replaces.putAll(this.getReplaceIcons());
 		}
 		
-		Map<Pattern, EReplace<?>> replaces = this.plugin.getChat().getReplaceAll(player);
-		replaces.put(Pattern.compile("<MESSAGE>"), EReplace.of(EChat.of(original)));
+		replaces.put(Pattern.compile("\\{MESSAGE}"), EReplace.of(EFormatString.of(original).toText(replaces)));
 		
 		return EFormatString.of(format).toText(replaces);
 	}

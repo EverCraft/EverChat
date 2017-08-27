@@ -53,11 +53,11 @@ public class ECConfig extends EConfig<EverChat> {
 		replaces.put("[RT]", "\n");
 		addDefault("replaces", replaces);
 		
-		addDefault("format-default", EReplacesPlayer.DISPLAYNAME.getName() + " &7:&f <MESSAGE>");
+		addDefault("format-default", EReplacesPlayer.DISPLAYNAME.getName() + " &7:&f {MESSAGE}");
 		
 		Map<String, String> formats = new HashMap<String, String>();
-		formats.put("Admin", "&f[&4Admin&f] " + EReplacesPlayer.DISPLAYNAME.getName() + " &7:&f <MESSAGE>");
-		formats.put("Moderator", "&f[&5Moderator&f] " + EReplacesPlayer.DISPLAYNAME.getName() + " &7:&f <MESSAGE>");
+		formats.put("Admin", "&f[&4Admin&f] " + EReplacesPlayer.DISPLAYNAME.getName() + " &7:&f {MESSAGE}");
+		formats.put("Moderator", "&f[&5Moderator&f] " + EReplacesPlayer.DISPLAYNAME.getName() + " &7:&f {MESSAGE}");
 		addDefault("format-groups", formats);
 	}
 	
@@ -83,7 +83,7 @@ public class ECConfig extends EConfig<EverChat> {
 	}
 	
 	public String getFormatDefault() {
-		return this.get("format-default").getString("<<NAME>> <MESSAGE>");
+		return this.get("format-default").getString("<{NAME}> {MESSAGE}");
 	}
 	
 	public boolean enableFormat() {
