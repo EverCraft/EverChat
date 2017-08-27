@@ -16,6 +16,8 @@
  */
 package fr.evercraft.everchat.service;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +25,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.spongepowered.api.service.context.Context;
@@ -37,6 +40,7 @@ import fr.evercraft.everapi.EAMessage.EAMessages;
 import fr.evercraft.everapi.event.ChatSystemEvent;
 import fr.evercraft.everapi.message.format.EFormatString;
 import fr.evercraft.everapi.message.replace.EReplace;
+import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everapi.services.ChatService;
 import fr.evercraft.everchat.ECMessage.ECMessages;
@@ -45,8 +49,11 @@ import fr.evercraft.everchat.EverChat;
 import fr.evercraft.everchat.icons.UtilsIcons;
 
 public class EChatService implements ChatService {
-	private static final Pattern REPLACE_ICONS = Pattern.compile("<(?:icon|Icon|ICON)=(.*?)>");
-	private static final Pattern REPLACE_COMMAND = Pattern.compile("\"/(.*?)\"");
+	private static final Pattern ICONS_PATTERN = Pattern.compile("\\{(?:icon|Icon|ICON)\\=(.*?)}");
+	private static final Pattern COMMAND_PATTERN = Pattern.compile("/(.*?)\\$");
+	private static final Pattern URL_PATTERN = Pattern.compile("((?<style>(&[0-9a-z])*)(?<url>(((https?)://)?[\\w-_\\.]{2,})\\.([a-z]{2,3}(/\\S+)?)))");
+	
+	public static final Pattern PATTERN_IP = Pattern.compile("((25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)(\\.(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)){3})");
 	
 	private final EverChat plugin;
 	
@@ -87,6 +94,7 @@ public class EChatService implements ChatService {
 		Map<Pattern, EReplace<?>> builder = this.getReplaceCharacters();
 		builder.putAll(this.getReplaceIcons());
 		builder.putAll(this.getReplaceCommand());
+		builder.putAll(this.getReplaceUrl());
 		return builder;
 	}
 	
@@ -98,8 +106,7 @@ public class EChatService implements ChatService {
 	@Override
 	public Map<Pattern, EReplace<?>> getReplaceIcons() {
 		HashMap<Pattern, EReplace<?>> builder = new HashMap<Pattern, EReplace<?>>();
-		builder.put(REPLACE_ICONS, EReplace.of(key -> {
-			System.out.println("icon : " + key);
+		builder.put(ICONS_PATTERN, EReplace.of(key -> {
 			try { 
 		        String value = String.valueOf((char)(UtilsIcons.CHARACTER + Integer.parseInt(key)));
 		        if (this.icons.containsValue(value)) {
@@ -119,11 +126,47 @@ public class EChatService implements ChatService {
 	@Override
 	public Map<Pattern, EReplace<?>> getReplaceCommand() {
 		HashMap<Pattern, EReplace<?>> builder = new HashMap<Pattern, EReplace<?>>();
-		builder.put(REPLACE_COMMAND, EReplace.of(value -> Text.builder("/" + value)
+		builder.put(COMMAND_PATTERN, EReplace.of(value -> Text.builder("/" + value)
 				.onHover(TextActions.showText(EAMessages.HOVER_COPY.getText()))
 				.onClick(TextActions.suggestCommand("/" + value))
 				.onShiftClick(TextActions.insertText("/" + value))
 			.build()));
+		return builder;
+	}
+	
+	@Override
+	public Map<Pattern, EReplace<?>> getReplaceUrl() {
+		HashMap<Pattern, EReplace<?>> builder = new HashMap<Pattern, EReplace<?>>();
+		builder.put(URL_PATTERN, EReplace.of(value -> {
+			Matcher matcher = URL_PATTERN.matcher(value);
+			if (matcher.find()) {
+				String style = matcher.group("style");
+				String url = matcher.group("url");
+				try {
+					return Text.builder(url)
+						.format(EChat.getTextFormat((style == null) ? "" : style))
+						.onShiftClick(TextActions.insertText(url))
+						.onClick(TextActions.openUrl(new URL(value.startsWith("http") ? url : "http://" + url)))
+						.onHover(TextActions.showText(EAMessages.HOVER_URL.getText()))
+						.build();
+				} catch (MalformedURLException e) {}
+			}
+			return Text.builder(value)
+				.onShiftClick(TextActions.insertText(value))
+				.build();
+		}));
+		builder.put(PATTERN_IP, EReplace.of(value -> {
+			try {
+				return Text.builder(value)
+					.onShiftClick(TextActions.insertText(value))
+					.onClick(TextActions.openUrl(new URL(value.startsWith("http") ? value : "http://" + value)))
+					.onHover(TextActions.showText(EAMessages.HOVER_URL.getText()))
+					.build();
+			} catch (MalformedURLException e) {}
+			return Text.builder(value)
+				.onShiftClick(TextActions.insertText(value))
+				.build();
+		}));
 		return builder;
 	}
 	
@@ -185,6 +228,9 @@ public class EChatService implements ChatService {
 		}
 		if (player.hasPermission(ECPermissions.ICONS.get())) {
 			replaces.putAll(this.getReplaceIcons());
+		}
+		if (player.hasPermission(ECPermissions.URL.get())) {
+			replaces.putAll(this.getReplaceUrl());
 		}
 		
 		replaces.put(Pattern.compile("\\{MESSAGE}"), EReplace.of(EFormatString.of(original).toText(replaces)));

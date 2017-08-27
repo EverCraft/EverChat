@@ -37,6 +37,7 @@ public enum ECPermissions implements EnumPermission {
 	CHARACTER("replace.character"),
 	COMMAND("replace.command"),
 	ICONS("replace.icons"),
+	URL("replace.url"),
 	
 	ICON_COMMAND("icon");
 	
