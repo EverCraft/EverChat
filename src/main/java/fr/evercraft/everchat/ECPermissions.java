@@ -23,23 +23,22 @@ import com.google.common.base.Preconditions;
 import fr.evercraft.everapi.plugin.EnumPermission;
 
 public enum ECPermissions implements EnumPermission {
-	EVERCHAT("command"),
+	EVERCHAT("commands.execute"),
+	HELP("commands.help"),
+	RELOAD("commands.reload"),
 	
-	HELP("help"),
-	RELOAD("reload"),
+	CLEAR("commands.clear.execute"),
+	CLEAR_OTHERS("commands.clear.others"),
 	
-	CLEAR("clear.command"),
-	CLEAR_OTHERS("clear.others"),
+	ICON_COMMAND("commands.icon.execute"),
 	
-	COLOR("replace.color"),
-	FORMAT("replace.format"),
-	MAGIC("replace.magic"),
-	CHARACTER("replace.character"),
-	COMMAND("replace.command"),
-	ICONS("replace.icons"),
-	URL("replace.url"),
-	
-	ICON_COMMAND("icon");
+	COLOR("replaces.color"),
+	FORMAT("replaces.format"),
+	MAGIC("replaces.magic"),
+	CHARACTER("replaces.character"),
+	COMMAND("replaces.command"),
+	ICONS("replaces.icons"),
+	URL("replaces.url");
 	
 	private final static String prefix = "everchat";
 	
