@@ -43,12 +43,12 @@ public class ECIcons extends ECommand<EverChat> {
 	
 
 	public ECIcons(final EverChat plugin) {
-		super(plugin, "icon", "icons");
+		super(plugin, "icons", "icon");
     }
 	
 	@Override
 	public boolean testPermission(final CommandSource source) {
-		return source.hasPermission(ECPermissions.ICON_COMMAND.get());
+		return source.hasPermission(ECPermissions.ICONS_COMMAND.get());
 	}
 	
 	@Override
@@ -58,8 +58,8 @@ public class ECIcons extends ECommand<EverChat> {
 
 	@Override
 	public Text help(final CommandSource source) {
-		return Text.builder("/icon [" + EAMessages.ARGS_ARGUMENTS.getString() + "]")
-				.onClick(TextActions.suggestCommand("/icon "))
+		return Text.builder("/" + this.getName() + " [" + EAMessages.ARGS_ARGUMENTS.getString() + "]")
+				.onClick(TextActions.suggestCommand("/" + this.getName() + " "))
 				.color(TextColors.RED)
 				.build();
 	}

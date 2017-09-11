@@ -30,7 +30,7 @@ public enum ECPermissions implements EnumPermission {
 	CLEAR("commands.clear.execute"),
 	CLEAR_OTHERS("commands.clear.others"),
 	
-	ICON_COMMAND("commands.icon.execute"),
+	ICONS_COMMAND("commands.icons.execute"),
 	
 	COLOR("replaces.color"),
 	FORMAT("replaces.format"),

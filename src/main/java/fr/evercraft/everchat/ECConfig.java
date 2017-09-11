@@ -23,7 +23,6 @@ import java.util.Map.Entry;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import fr.evercraft.everapi.message.replace.EReplacesPlayer;
 import fr.evercraft.everapi.plugin.file.EConfig;
-import fr.evercraft.everapi.plugin.file.EMessage;
 
 public class ECConfig extends EConfig<EverChat> {
 
@@ -38,11 +37,9 @@ public class ECConfig extends EConfig<EverChat> {
 	
 	@Override
 	public void loadDefault() {
-		addDefault("DEBUG", false, "Displays plugin performance in the logs");
-		addDefault("LANGUAGE", EMessage.FRENCH, "Select language messages", "Examples : ", "  French : FR_fr", "  English : EN_en");
+		this.configDefault();
 		
-		addDefault("enable-format", true);
-		addDefault("enable-icons", true);
+		addDefault("icons-enable", true);
 		
 		Map<String, String> replaces = new HashMap<String, String>();
 		replaces.put("[<3]", "\u2764");
@@ -53,12 +50,13 @@ public class ECConfig extends EConfig<EverChat> {
 		replaces.put("[RT]", "\n");
 		addDefault("replaces", replaces);
 		
-		addDefault("format-default", EReplacesPlayer.DISPLAYNAME.getName() + " &7:&f {MESSAGE}");
+		addDefault("format.enable", true);
+		addDefault("format.default", EReplacesPlayer.DISPLAYNAME.getName() + " &7:&f {MESSAGE}");
 		
 		Map<String, String> formats = new HashMap<String, String>();
 		formats.put("Admin", "&f[&4Admin&f] " + EReplacesPlayer.DISPLAYNAME.getName() + " &7:&f {MESSAGE}");
 		formats.put("Moderator", "&f[&5Moderator&f] " + EReplacesPlayer.DISPLAYNAME.getName() + " &7:&f {MESSAGE}");
-		addDefault("format-groups", formats);
+		addDefault("format.groups", formats);
 	}
 	
 	public Map<String, String> getReplaces() {
@@ -73,7 +71,7 @@ public class ECConfig extends EConfig<EverChat> {
 	
 	public Map<String, String> getFormatGroups() {
 		Map<String, String> replaces = new HashMap<String, String>();
-		for (Entry<Object, ? extends CommentedConfigurationNode> node : this.get("format-groups").getChildrenMap().entrySet()) {
+		for (Entry<Object, ? extends CommentedConfigurationNode> node : this.get("format.groups").getChildrenMap().entrySet()) {
 			String value = node.getValue().getString(null);
 			if (node.getKey() instanceof String && value != null) {
 				replaces.put((String) node.getKey(), value);
@@ -83,14 +81,14 @@ public class ECConfig extends EConfig<EverChat> {
 	}
 	
 	public String getFormatDefault() {
-		return this.get("format-default").getString("<{NAME}> {MESSAGE}");
+		return this.get("format.default").getString("<{NAME}> {MESSAGE}");
 	}
 	
 	public boolean enableFormat() {
-		return this.get("enable-format").getBoolean(true);
+		return this.get("format.enable").getBoolean(true);
 	}
 	
 	public boolean enableIcons() {
-		return this.get("enable-icons").getBoolean(true);
+		return this.get("icons.enable").getBoolean(true);
 	}
 }

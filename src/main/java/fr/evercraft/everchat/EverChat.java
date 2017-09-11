@@ -22,6 +22,8 @@ import org.spongepowered.api.plugin.Plugin;
 import fr.evercraft.everapi.EverAPI;
 import fr.evercraft.everapi.event.ChatSystemEvent;
 import fr.evercraft.everapi.event.ESpongeEventFactory;
+import fr.evercraft.everapi.exception.PluginDisableException;
+import fr.evercraft.everapi.exception.ServerDisableException;
 import fr.evercraft.everapi.plugin.EPlugin;
 import fr.evercraft.everapi.services.ChatService;
 import fr.evercraft.everchat.command.ECIcons;
@@ -89,8 +91,10 @@ public class EverChat extends EPlugin<EverChat> {
 		}
 	}
 
-	protected void onReload(){
-		this.reloadConfigurations();
+	@Override
+	protected void onReload() throws PluginDisableException, ServerDisableException {
+		super.onReload();
+		
 		this.service.reload();
 	}
 	
