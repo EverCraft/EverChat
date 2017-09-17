@@ -38,7 +38,7 @@ public enum ECPermissions implements EnumPermission {
 	ICONS("replaces.icons", ECMessages.PERMISSIONS_REPLACES_ICONS),
 	URL("replaces.url", ECMessages.PERMISSIONS_REPLACES_URL);
 	
-	private final static String prefix = "everchat";
+	private static final String PREFIX = "everchat";
 	
 	private final String permission;
 	private final EnumMessage message;
@@ -49,14 +49,14 @@ public enum ECPermissions implements EnumPermission {
     }
     
     private ECPermissions(final String permission, final EnumMessage message, final boolean value) {   	    	
-    	this.permission = permission;
+    	this.permission = PREFIX + "." + permission;
     	this.message = message;
     	this.value = value;
     }
 
     @Override
     public String get() {
-		return ECPermissions.prefix + "." + this.permission;
+    	return this.permission;
 	}
 
 	@Override
