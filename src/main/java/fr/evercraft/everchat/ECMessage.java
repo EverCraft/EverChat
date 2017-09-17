@@ -31,52 +31,47 @@ public class ECMessage extends EMessage<EverChat> {
 	}
 	
 	public enum ECMessages implements EnumMessage {
-		PREFIX("PREFIX",  							
-				"[&4Ever&6&lIcons&f] "),
-		DESCRIPTION("description", 
+		PREFIX("[&4Ever&6&lIcons&f] "),
+		DESCRIPTION(
 				"Gestion du tchat", 
 				"Management of the chat"),
-		CLEAR_DESCRIPTION("clearDescription",
-				"Efface le chat du jeu"),
-		CLEAR_PLAYER("clearPlayer",
-				"&7Votre chat a été effacé par &6{player}&7."),
-		CLEAR_OTHERS("clearOthers",
-				"&7Vous avez effacé le chat de &6{player}&7."),
-		CLEAR_ALL("clearAll",
-				"&7Vous avez effacé le chat de tous les joueurs."),
-		ICON_DESCRIPTION("iconDescription", 
+		CLEAR_DESCRIPTION("Efface le chat du jeu"),
+		CLEAR_PLAYER("&7Votre chat a été effacé par &6{player}&7."),
+		CLEAR_OTHERS("&7Vous avez effacé le chat de &6{player}&7."),
+		CLEAR_ALL("&7Vous avez effacé le chat de tous les joueurs."),
+		ICON_DESCRIPTION(
 				"Affiche la liste des icônes", 
 				"Displays the list of icons"),
-		ICON_LIST_TITLE("iconListTitle", 
+		ICON_LIST_TITLE(
 				"&aLa liste des icônes", 
 				"&aThe list of icons"),
-		ICON_LIST_EMPTY("iconListEmtpy", 
+		ICON_LIST_EMPTY(
 				"&7Aucune icône", 
 				"&7None icon"),
-		ICON_SEARCH_TITLE("iconSearchTitle", 
+		ICON_SEARCH_TITLE(
 				"&aRecherche d'icônes", 
 				"&aSearch for icons"),
-		ICON_SEARCH_EMPTY("iconSearchEmpty", 
+		ICON_SEARCH_EMPTY(
 				"&aAucune icône trouvée", 
 				"&aNo found icon"),
-		ICON_HOVER("iconHover", 
+		ICON_HOVER(
 				"&7Numéro : &a{id}[RT]&7Nom : &a{name}", 
 				"&7ID : &a{id}[RT]&7Name : &a{name}"),
-		ICON_UNKNOWN("iconUnknown", "{icon=UNKNOWN}"),
+		ICON_UNKNOWN("{icon=UNKNOWN}"),
 		
-		PERMISSIONS_COMMANDS_EXECUTE("permissionsCommandsExecute", ""),
-		PERMISSIONS_COMMANDS_HELP("permissionsCommandsHelp", ""),
-		PERMISSIONS_COMMANDS_RELOAD("permissionsCommandsReload", ""),
-		PERMISSIONS_COMMANDS_CLEAR_EXECUTE("permissionsCommandsClearExecute", ""),
-		PERMISSIONS_COMMANDS_CLEAR_OTHERS("permissionsCommandsClearOthers", ""),
-		PERMISSIONS_COMMANDS_ICONS_EXECUTE("permissionsCommandsIconsExecute", ""),
-		PERMISSIONS_REPLACES_COLOR("permissionsReplacesColor", ""),
-		PERMISSIONS_REPLACES_FORMAT("permissionsReplacesFormat", ""),
-		PERMISSIONS_REPLACES_MAGIC("permissionsReplacesMagic", ""),
-		PERMISSIONS_REPLACES_CHARACTER("permissionsReplacesCharacter", ""),
-		PERMISSIONS_REPLACES_COMMAND("permissionsReplacesCommand", ""),
-		PERMISSIONS_REPLACES_ICONS("permissionsReplacesIcons", ""),
-		PERMISSIONS_REPLACES_URL("permissionsReplacesUrl", "");
+		PERMISSIONS_COMMANDS_EXECUTE(""),
+		PERMISSIONS_COMMANDS_HELP(""),
+		PERMISSIONS_COMMANDS_RELOAD(""),
+		PERMISSIONS_COMMANDS_CLEAR_EXECUTE(""),
+		PERMISSIONS_COMMANDS_CLEAR_OTHERS(""),
+		PERMISSIONS_COMMANDS_ICONS_EXECUTE(""),
+		PERMISSIONS_REPLACES_COLOR(""),
+		PERMISSIONS_REPLACES_FORMAT(""),
+		PERMISSIONS_REPLACES_MAGIC(""),
+		PERMISSIONS_REPLACES_CHARACTER(""),
+		PERMISSIONS_REPLACES_COMMAND(""),
+		PERMISSIONS_REPLACES_ICONS(""),
+		PERMISSIONS_REPLACES_URL("");
 		
 		private final String path;
 	    private final EMessageBuilder french;
@@ -84,24 +79,23 @@ public class ECMessage extends EMessage<EverChat> {
 	    private EMessageFormat message;
 	    private EMessageBuilder builder;
 	    
-	    private ECMessages(final String path, final String french) {   	
-	    	this(path, EMessageFormat.builder().chat(new EFormatString(french), true));
+	    private ECMessages(final String french) {   	
+	    	this(EMessageFormat.builder().chat(new EFormatString(french), true));
 	    }
 	    
-	    private ECMessages(final String path, final String french, final String english) {   	
-	    	this(path, 
-	    		EMessageFormat.builder().chat(new EFormatString(french), true), 
+	    private ECMessages(final String french, final String english) {   	
+	    	this(EMessageFormat.builder().chat(new EFormatString(french), true), 
 	    		EMessageFormat.builder().chat(new EFormatString(english), true));
 	    }
 	    
-	    private ECMessages(final String path, final EMessageBuilder french) {   	
-	    	this(path, french, french);
+	    private ECMessages(final EMessageBuilder french) {   	
+	    	this(french, french);
 	    }
 	    
-	    private ECMessages(final String path, final EMessageBuilder french, final EMessageBuilder english) {
+	    private ECMessages(final EMessageBuilder french, final EMessageBuilder english) {
 	    	Preconditions.checkNotNull(french, "Le message '" + this.name() + "' n'est pas définit");
 	    	
-	    	this.path = path;	    	
+	    	this.path = this.resolvePath();	    	
 	    	this.french = french;
 	    	this.english = english;
 	    	this.message = french.build();
