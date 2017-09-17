@@ -62,7 +62,21 @@ public class ECMessage extends EMessage<EverChat> {
 		ICON_HOVER("iconHover", 
 				"&7Numéro : &a{id}[RT]&7Nom : &a{name}", 
 				"&7ID : &a{id}[RT]&7Name : &a{name}"),
-		ICON_UNKNOWN("iconUnknown", "{icon=UNKNOWN}");
+		ICON_UNKNOWN("iconUnknown", "{icon=UNKNOWN}"),
+		
+		PERMISSIONS_COMMANDS_EXECUTE("permissionsCommandsExecute", ""),
+		PERMISSIONS_COMMANDS_HELP("permissionsCommandsHelp", ""),
+		PERMISSIONS_COMMANDS_RELOAD("permissionsCommandsReload", ""),
+		PERMISSIONS_COMMANDS_CLEAR_EXECUTE("permissionsCommandsClearExecute", ""),
+		PERMISSIONS_COMMANDS_CLEAR_OTHERS("permissionsCommandsClearOthers", ""),
+		PERMISSIONS_COMMANDS_ICONS_EXECUTE("permissionsCommandsIconsExecute", ""),
+		PERMISSIONS_REPLACES_COLOR("permissionsReplacesColor", ""),
+		PERMISSIONS_REPLACES_FORMAT("permissionsReplacesFormat", ""),
+		PERMISSIONS_REPLACES_MAGIC("permissionsReplacesMagic", ""),
+		PERMISSIONS_REPLACES_CHARACTER("permissionsReplacesCharacter", ""),
+		PERMISSIONS_REPLACES_COMMAND("permissionsReplacesCommand", ""),
+		PERMISSIONS_REPLACES_ICONS("permissionsReplacesIcons", ""),
+		PERMISSIONS_REPLACES_URL("permissionsReplacesUrl", "");
 		
 		private final String path;
 	    private final EMessageBuilder french;

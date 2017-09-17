@@ -16,45 +16,56 @@
  */
 package fr.evercraft.everchat;
 
-import org.spongepowered.api.command.CommandSource;
-
-import com.google.common.base.Preconditions;
-
 import fr.evercraft.everapi.plugin.EnumPermission;
+import fr.evercraft.everapi.plugin.file.EnumMessage;
+import fr.evercraft.everchat.ECMessage.ECMessages;
 
 public enum ECPermissions implements EnumPermission {
-	EVERCHAT("commands.execute"),
-	HELP("commands.help"),
-	RELOAD("commands.reload"),
+	EVERCHAT("commands.execute", ECMessages.PERMISSIONS_COMMANDS_EXECUTE),
+	HELP("commands.help", ECMessages.PERMISSIONS_COMMANDS_HELP),
+	RELOAD("commands.reload", ECMessages.PERMISSIONS_COMMANDS_RELOAD),
 	
-	CLEAR("commands.clear.execute"),
-	CLEAR_OTHERS("commands.clear.others"),
+	CLEAR("commands.clear.execute", ECMessages.PERMISSIONS_COMMANDS_CLEAR_EXECUTE),
+	CLEAR_OTHERS("commands.clear.others", ECMessages.PERMISSIONS_COMMANDS_CLEAR_OTHERS),
 	
-	ICONS_COMMAND("commands.icons.execute"),
+	ICONS_COMMAND("commands.icons.execute", ECMessages.PERMISSIONS_COMMANDS_ICONS_EXECUTE, true),
 	
-	COLOR("replaces.color"),
-	FORMAT("replaces.format"),
-	MAGIC("replaces.magic"),
-	CHARACTER("replaces.character"),
-	COMMAND("replaces.command"),
-	ICONS("replaces.icons"),
-	URL("replaces.url");
+	COLOR("replaces.color", ECMessages.PERMISSIONS_REPLACES_COLOR),
+	FORMAT("replaces.format", ECMessages.PERMISSIONS_REPLACES_FORMAT),
+	MAGIC("replaces.magic", ECMessages.PERMISSIONS_REPLACES_MAGIC),
+	CHARACTER("replaces.character", ECMessages.PERMISSIONS_REPLACES_CHARACTER),
+	COMMAND("replaces.command", ECMessages.PERMISSIONS_REPLACES_COMMAND),
+	ICONS("replaces.icons", ECMessages.PERMISSIONS_REPLACES_ICONS),
+	URL("replaces.url", ECMessages.PERMISSIONS_REPLACES_URL);
 	
 	private final static String prefix = "everchat";
 	
 	private final String permission;
+	private final EnumMessage message;
+	private final boolean value;
     
-    private ECPermissions(final String permission) {   	
-    	Preconditions.checkNotNull(permission, "La permission '" + this.name() + "' n'est pas définit");
-    	
+    private ECPermissions(final String permission, final EnumMessage message) {
+    	this(permission, message, false);
+    }
+    
+    private ECPermissions(final String permission, final EnumMessage message, final boolean value) {   	    	
     	this.permission = permission;
+    	this.message = message;
+    	this.value = value;
     }
 
+    @Override
     public String get() {
 		return ECPermissions.prefix + "." + this.permission;
 	}
-    
-    public boolean has(CommandSource player) {
-    	return player.hasPermission(this.get());
-    }
+
+	@Override
+	public boolean getDefault() {
+		return this.value;
+	}
+
+	@Override
+	public EnumMessage getMessage() {
+		return this.message;
+	}
 }
