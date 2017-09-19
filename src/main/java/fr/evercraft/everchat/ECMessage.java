@@ -130,4 +130,9 @@ public class ECMessage extends EMessage<EverChat> {
 			this.builder = message;
 		}
 	}
+	
+	@Override
+	public EnumMessage getPrefix() {
+		return ECMessages.PREFIX;
+	}
 }
