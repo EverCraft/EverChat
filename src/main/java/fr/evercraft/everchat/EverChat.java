@@ -16,7 +16,6 @@
  */
 package fr.evercraft.everchat;
 
-import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
 
@@ -105,7 +104,7 @@ public class EverChat extends EPlugin<EverChat> {
 	public void postEvent(ChatSystemEvent.Action action) {
 		if (action.equals(ChatSystemEvent.Action.RELOADED)) {
 			this.getELogger().debug("Event ChatSystemEvent.Reload");
-			this.getGame().getEventManager().post(ESpongeEventFactory.createChatSystemEventReload(Cause.source(this).build()));
+			this.getGame().getEventManager().post(ESpongeEventFactory.createChatSystemEventReload(this.getGame().getCauseStackManager().getCurrentCause()));
 		}
 	}
 
